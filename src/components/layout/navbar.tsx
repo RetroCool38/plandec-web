@@ -58,22 +58,7 @@ export default function Navbar() {
 
         <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => {
-            const hasChildren = Array.isArray(link.children);
-
-            if (!hasChildren) {
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-sm font-medium text-white/80 transition hover:text-white"
-                >
-                  {link.label}
-                </Link>
-              );
-            }
-
-            const children = link.children;
-
+           
             return (
               <div key={link.label} className="relative" ref={dropdownRef}>
                 <button
