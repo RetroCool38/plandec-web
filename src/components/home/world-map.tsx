@@ -4,7 +4,8 @@ import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
 import Container from "@/components/ui/container";
 
-const countries = [
+
+ const countries = [
   {
     id: "colombia",
     name: "Colombia",
@@ -14,6 +15,16 @@ const countries = [
     width: 34,
     height: 54,
     color: "#F4C542",
+  },
+  {
+    id: "panama",
+    name: "Panamá",
+    href: "/pais/panama",
+    x: 270,
+    y: 235,
+    width: 26,
+    height: 18,
+    color: "#E53935",
   },
   {
     id: "brasil",
@@ -65,6 +76,16 @@ const countries = [
     height: 28,
     color: "#4F7CAC",
   },
+  {
+  id: "paises-bajos",
+  name: "Países Bajos",
+  href: "/pais/paises-bajos",
+  x: 610,
+  y: 150,
+  width: 20,
+  height: 20,
+  color: "#FF6F00",
+},
   {
     id: "alemania",
     name: "Alemania",
@@ -170,16 +191,16 @@ export default function WorldMap() {
           </div>
 
           <div className="mt-4 flex flex-wrap gap-3 text-sm text-white/65">
-            <span className="rounded-full border border-white/10 px-3 py-1">
-              Colombia activa
-            </span>
-            <span className="rounded-full border border-white/10 px-3 py-1">
-              Próximamente más países
-            </span>
-            <span className="rounded-full border border-white/10 px-3 py-1">
-              Clic en el país para abrir su ficha
-            </span>
-          </div>
+  <span className="rounded-full border border-white/10 px-3 py-1">
+    Colombia activa
+  </span>
+  <span className="rounded-full border border-white/10 px-3 py-1">
+    Panamá activa
+  </span>
+  <span className="rounded-full border border-white/10 px-3 py-1">
+    Clic en el país para abrir su ficha
+  </span>
+</div>
         </div>
       </Container>
     </section>
