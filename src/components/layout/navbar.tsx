@@ -4,7 +4,13 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import Container from "@/components/ui/container";
 
-const navLinks = [
+type NavItem = {
+  label: string;
+  href: string;
+  children?: { label: string; href: string }[];
+};
+
+const navLinks: NavItem[] = [
   { label: "Inicio", href: "/" },
   { label: "Nosotros", href: "/nosotros" },
   { label: "Soluciones", href: "/soluciones" },
@@ -43,17 +49,16 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0B1020]/90 backdrop-blur-md">
       <Container className="flex h-20 items-center justify-between">
         <Link href="/" className="flex items-center">
-  <img
-    src="/logo333.png"
-    alt="PLANdeC"
-    className="h-10 w-auto object-contain"
-  />
-</Link>
+          <img
+            src="/logo333.png"
+            alt="PLANdeC"
+            className="h-10 w-auto object-contain"
+          />
+        </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => {
-            const hasChildren =
-              "children" in link && Array.isArray(link.children);
+            const hasChildren = Array.isArray(link.children);
 
             if (!hasChildren) {
               return (
@@ -66,6 +71,8 @@ export default function Navbar() {
                 </Link>
               );
             }
+
+            const children = link.children;
 
             return (
               <div key={link.label} className="relative" ref={dropdownRef}>
@@ -89,7 +96,7 @@ export default function Navbar() {
                 {openDropdown === link.label && (
                   <div className="absolute left-0 top-full mt-2 min-w-[220px] overflow-hidden rounded-2xl border border-white/10 bg-[#0B1020] shadow-2xl">
                     <div className="p-2">
-                      {link.children.map((child) => (
+                      {children.map((child) => (
                         <Link
                           key={child.href}
                           href={child.href}
