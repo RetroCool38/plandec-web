@@ -4,10 +4,15 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import Container from "@/components/ui/container";
 
+type NavChild = {
+  label: string;
+  href: string;
+};
+
 type NavItem = {
   label: string;
   href: string;
-  children?: { label: string; href: string }[];
+  children?: NavChild[];
 };
 
 const navLinks: NavItem[] = [
@@ -58,7 +63,18 @@ export default function Navbar() {
 
         <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => {
-           
+            if (!link.children) {
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm font-medium text-white/80 transition hover:text-white"
+                >
+                  {link.label}
+                </Link>
+              );
+            }
+
             return (
               <div key={link.label} className="relative" ref={dropdownRef}>
                 <button
@@ -81,7 +97,7 @@ export default function Navbar() {
                 {openDropdown === link.label && (
                   <div className="absolute left-0 top-full mt-2 min-w-[220px] overflow-hidden rounded-2xl border border-white/10 bg-[#0B1020] shadow-2xl">
                     <div className="p-2">
-                      {children.map((child) => (
+                      {link.children.map((child) => (
                         <Link
                           key={child.href}
                           href={child.href}
