@@ -1,31 +1,42 @@
-import Container from "@/components/ui/container";
-import { getNews } from "@/services/notion/news-service";
+import Link from "next/link";
+import { newsMock } from "@/services/mock/news";
+import NewsCard from "@/components/news/news-card";
 
-export default async function NewsSection() {
-  const news = await getNews();
-
+export default function NewsSection() {
   return (
-    <section className="py-20">
-      <Container>
+    <section className="mt-20">
+      <div className="flex items-end justify-between gap-6">
         <div>
-          <h2 className="text-2xl font-semibold">Noticias y análisis recientes</h2>
+          <h2 className="text-2xl font-bold text-white">
+            Noticias estratégicas
+          </h2>
           <p className="mt-3 max-w-2xl text-white/65">
-            Información estratégica, coyuntura y lectura política en tiempo real.
+            Coyuntura, análisis y lectura política preparados para evolucionar
+            hacia contenido editorial conectado a CMS.
           </p>
         </div>
 
-        <div className="mt-8 grid gap-6 md:grid-cols-3">
-          {news.map((item) => (
-            <article
-              key={item.id}
-              className="rounded-2xl border border-white/10 bg-[#0B1020] p-6 transition hover:border-white/20 hover:translate-y-[-2px]"
-            >
-              <h3 className="text-lg font-semibold">{item.title}</h3>
-              <p className="mt-3 text-sm text-white/65">{item.excerpt}</p>
-            </article>
-          ))}
-        </div>
-      </Container>
+        <Link
+          href="/noticias"
+          className="text-sm font-medium text-[#A970FF] transition hover:text-white"
+        >
+          Ver todas
+        </Link>
+      </div>
+
+      <div className="mt-8 grid gap-6 md:grid-cols-3">
+        {newsMock.map((news) => (
+          <NewsCard
+            key={news.id}
+            slug={news.slug}
+            title={news.title}
+            country={news.country}
+            date={news.date}
+            summary={news.summary}
+            image={news.image}
+          />
+        ))}
+      </div>
     </section>
   );
 }

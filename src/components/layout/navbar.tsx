@@ -19,7 +19,14 @@ const navLinks: NavItem[] = [
   { label: "Inicio", href: "/" },
   { label: "Nosotros", href: "/nosotros" },
   { label: "Soluciones", href: "/soluciones" },
-  { label: "Noticias", href: "/noticias" },
+  {
+    label: "Noticias",
+    href: "/noticias",
+    children: [
+      { label: "Noticias por país", href: "/noticias" },
+      { label: "Edición de noticias", href: "/noticias/editar" },
+    ],
+  },
   {
     label: "País",
     href: "/pais",
@@ -34,14 +41,11 @@ const navLinks: NavItem[] = [
 
 export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const navRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
         setOpenDropdown(null);
       }
     }
@@ -61,7 +65,7 @@ export default function Navbar() {
           />
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav ref={navRef} className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => {
             if (!link.children) {
               return (
@@ -76,7 +80,7 @@ export default function Navbar() {
             }
 
             return (
-              <div key={link.label} className="relative" ref={dropdownRef}>
+              <div key={link.label} className="relative">
                 <button
                   type="button"
                   onClick={() =>
@@ -95,7 +99,7 @@ export default function Navbar() {
                 </button>
 
                 {openDropdown === link.label && (
-                  <div className="absolute left-0 top-full mt-2 min-w-[220px] overflow-hidden rounded-2xl border border-white/10 bg-[#0B1020] shadow-2xl">
+                  <div className="absolute left-0 top-full mt-2 min-w-[240px] overflow-hidden rounded-2xl border border-white/10 bg-[#0B1020] shadow-2xl">
                     <div className="p-2">
                       {link.children.map((child) => (
                         <Link
