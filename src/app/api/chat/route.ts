@@ -5,7 +5,7 @@ export async function POST(req: Request) {
     const { message } = await req.json();
 
     const res = await fetch(
-     "https://predicted-meters-mpegs-disciplinary.trycloudflare.com",
+      "https://predicted-meters-mpegs-disciplinary.trycloudflare.com/api/v1/workspace/mi-espacio-de-trabajo/chat",
       {
         method: "POST",
         headers: {
@@ -19,17 +19,16 @@ export async function POST(req: Request) {
       }
     );
 
-    const data = await res.json();
+    const raw = await res.text();
 
     return NextResponse.json({
-      textResponse: data.textResponse,
+      status: res.status,
+      ok: res.ok,
+      raw,
     });
   } catch (error) {
-    return NextResponse.json(
-      {
-        textResponse: "Error conectando con la IA.",
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({
+      error: String(error),
+    });
   }
 }
