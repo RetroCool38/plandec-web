@@ -5,7 +5,7 @@ export async function POST(req: Request) {
     const { message } = await req.json();
 
     const res = await fetch(
-      "http://localhost:3001/api/v1/workspace/mi-espacio-de-trabajo/chat",
+     "https://predicted-meters-mpegs-disciplinary.trycloudflare.com",
       {
         method: "POST",
         headers: {
