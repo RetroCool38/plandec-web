@@ -19,13 +19,16 @@ export async function POST(req: Request) {
       }
     );
 
-    const raw = await res.text();
+const data = await res.json();
 
-    return NextResponse.json({
-      status: res.status,
-      ok: res.ok,
-      raw,
-    });
+return NextResponse.json({
+  textResponse:
+    data.textResponse ||
+    data.response ||
+    data.message ||
+    data.raw ||
+    JSON.stringify(data),
+});
   } catch (error) {
     return NextResponse.json({
       error: String(error),
