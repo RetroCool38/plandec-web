@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
 
 const ai = new GoogleGenAI({
-  apiKey: process.env.AIzaSyCpP2Gut7hnjqEBChnIC_34T964jpJdIik,
+ apiKey: process.env.GEMINI_API_KEY,
 });
 
 export async function POST(req: Request) {
@@ -22,7 +22,7 @@ ${message}
 `;
 
     const result = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-1.5-flash",
       contents: prompt,
     });
 
