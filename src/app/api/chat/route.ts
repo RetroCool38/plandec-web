@@ -1,37 +1,45 @@
+import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
+
+const ai = new GoogleGenAI({
+  apiKey: process.env.AIzaSyCpP2Gut7hnjqEBChnIC_34T964jpJdIik,
+});
 
 export async function POST(req: Request) {
   try {
     const { message } = await req.json();
 
-    const res = await fetch(
-      "https://predicted-meters-mpegs-disciplinary.trycloudflare.com/api/v1/workspace/mi-espacio-de-trabajo/chat",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer FASFEKZ-G3148S7-MH4DG5P-B4DR607",
-        },
-        body: JSON.stringify({
-          message,
-          mode: "chat",
-        }),
-      }
-    );
+    const prompt = `
+Eres el asistente oficial de PLANdeC.
+PLANdeC es una firma de estrategia política, comunicación, marketing político, inteligencia electoral y tecnología aplicada.
 
-const data = await res.json();
+Responde en español, breve, profesional y útil.
 
-return NextResponse.json({
-  textResponse:
-    data.textResponse ||
-    data.response ||
-    data.message ||
-    data.raw ||
-    JSON.stringify(data),
-});
-  } catch (error) {
-    return NextResponse.json({
-      error: String(error),
+Si el usuario saluda, saluda y ofrece ayuda sobre PLANdeC.
+
+Pregunta:
+${message}
+`;
+
+    const result = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
     });
+
+    const reply =
+      result.candidates?.[0]?.content?.parts
+        ?.map((part) => part.text || "")
+        .join("")
+        .trim() ||
+      result.text ||
+      "Hola, soy el asistente IA de PLANdeC. Puedo ayudarte con servicios, estrategia política, inteligencia electoral y contacto.";
+
+    return NextResponse.json({ reply });
+  } catch (error) {
+    console.error("Error Gemini:", error);
+    return NextResponse.json(
+      { reply: "Hubo un problema conectando con la IA." },
+      { status: 500 }
+    );
   }
 }

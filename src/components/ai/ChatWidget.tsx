@@ -24,7 +24,7 @@ export default function ChatWidget() {
 
     const data = await res.json();
 
-    setReply(data.textResponse || "No encontré una respuesta clara.");
+    setReply(data.reply || "No encontré una respuesta clara.");
   } catch (error) {
     setReply("Error de conexión con la IA.");
   }
