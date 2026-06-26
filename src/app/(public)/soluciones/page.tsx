@@ -127,7 +127,7 @@ export default function SolucionesPage() {
           </form>
 
           <a
-            href="https://wa.me/31642740647?text=Hola,%20quiero%20información%20sobre%20asesoría%20política"
+            href="https://wa.me/+573160450461?text=Hola,%20quiero%20información%20sobre%20asesoría%20política"
             target="_blank"
             rel="noreferrer"
             className="mt-6 block rounded-full border border-white/20 py-3 text-center text-white transition hover:bg-white/10"

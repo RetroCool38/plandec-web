@@ -23,6 +23,29 @@ export default async function CountryPage({ params }: CountryPageProps) {
     notFound();
   }
 
+  const politicalInfo = [
+    {
+      label: country.headOfStateTitle || "Presidente",
+      value: country.headOfState || country.president,
+    },
+    {
+      label: country.headOfGovernmentTitle,
+      value: country.headOfGovernment,
+    },
+    {
+      label: "Capital",
+      value: country.capital,
+    },
+    {
+      label: "Última elección",
+      value: country.election,
+    },
+    {
+      label: "Participación",
+      value: country.turnout,
+    },
+  ].filter((item) => item.value);
+
   return (
     <Container className="py-16">
       <div className="flex items-center gap-4">
@@ -35,8 +58,18 @@ export default async function CountryPage({ params }: CountryPageProps) {
 
       <div className="mt-10 grid gap-6 md:grid-cols-3">
         <div className="rounded-xl border border-white/10 p-6">
-          <h3 className="text-sm text-white/60">Presidente</h3>
-          <p className="mt-2 text-lg font-semibold">{country.president}</p>
+          <h3 className="text-sm text-white/60">Información política</h3>
+
+          <div className="mt-5 space-y-5">
+            {politicalInfo.map((item) => (
+              <div key={item.label}>
+                <p className="text-sm uppercase tracking-[0.18em] text-white/40">
+                  {item.label}
+                </p>
+                <p className="mt-2 text-lg font-semibold">{item.value}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="rounded-xl border border-white/10 p-6 md:col-span-2">
@@ -49,7 +82,16 @@ export default async function CountryPage({ params }: CountryPageProps) {
                 className="rounded-xl border border-white/10 p-5 transition hover:scale-[1.02]"
               >
                 <div className="flex items-center justify-between gap-4">
-                  <h4 className="font-semibold">{party.name}</h4>
+                  <div>
+                    <h4 className="font-semibold">{party.name}</h4>
+
+                    {"seats" in party && party.seats && (
+                      <p className="mt-1 text-xs text-white/50">
+                        {party.seats} escaños
+                      </p>
+                    )}
+                  </div>
+
                   <span
                     className="text-sm font-bold"
                     style={{ color: party.color }}

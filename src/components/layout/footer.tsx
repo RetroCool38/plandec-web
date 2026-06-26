@@ -44,12 +44,12 @@ export default function Footer() {
               <div>
                 <p className="text-white">WhatsApp</p>
                 <a
-                  href="https://wa.me/31642740647"
+                  href="https://wa.me/3160450461"
                   target="_blank"
                   rel="noreferrer"
                   className="text-[#A970FF] hover:underline"
                 >
-                  +31 642740647
+                  +31 3160450461
                 </a>
               </div>
 
