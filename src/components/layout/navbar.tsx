@@ -51,11 +51,14 @@ export default function Navbar() {
     }
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0B1020]/90 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-[#E8E0EC] bg-white/95 shadow-sm backdrop-blur-md">
       <Container className="flex h-20 items-center justify-between">
         <Link href="/" className="flex items-center">
           <img
@@ -72,41 +75,45 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm font-medium text-white/80 transition hover:text-white"
+                  className="text-sm font-medium text-[#4F4658] transition hover:text-[#5A2D82]"
                 >
                   {link.label}
                 </Link>
               );
             }
 
+            const isOpen = openDropdown === link.label;
+
             return (
               <div key={link.label} className="relative">
                 <button
                   type="button"
                   onClick={() =>
-                    setOpenDropdown(openDropdown === link.label ? null : link.label)
+                    setOpenDropdown(isOpen ? null : link.label)
                   }
-                  className="flex items-center gap-2 text-sm font-medium text-white/80 transition hover:text-white"
+                  className="flex items-center gap-2 text-sm font-medium text-[#4F4658] transition hover:text-[#5A2D82]"
+                  aria-expanded={isOpen}
                 >
                   {link.label}
+
                   <span
-                    className={`text-xs transition ${
-                      openDropdown === link.label ? "rotate-180" : ""
+                    className={`text-[10px] text-[#7B3FB6] transition-transform ${
+                      isOpen ? "rotate-180" : ""
                     }`}
                   >
                     ▼
                   </span>
                 </button>
 
-                {openDropdown === link.label && (
-                  <div className="absolute left-0 top-full mt-2 min-w-[240px] overflow-hidden rounded-2xl border border-white/10 bg-[#0B1020] shadow-2xl">
+                {isOpen && (
+                  <div className="absolute left-0 top-full mt-3 min-w-[240px] overflow-hidden rounded-2xl border border-[#E8E0EC] bg-white shadow-xl shadow-[#5A2D82]/10">
                     <div className="p-2">
                       {link.children.map((child) => (
                         <Link
                           key={child.href}
                           href={child.href}
                           onClick={() => setOpenDropdown(null)}
-                          className="block rounded-xl px-4 py-3 text-sm text-white/80 transition hover:bg-white/5 hover:text-white"
+                          className="block rounded-xl px-4 py-3 text-sm text-[#5F5868] transition hover:bg-[#F5EFF8] hover:text-[#5A2D82]"
                         >
                           {child.label}
                         </Link>
@@ -121,7 +128,7 @@ export default function Navbar() {
 
         <Link
           href="/login"
-          className="rounded-full border border-[#5A2D82] bg-[#5A2D82] px-5 py-2 text-sm font-semibold text-white transition hover:opacity-90"
+          className="rounded-full bg-[#5A2D82] px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-[#5A2D82]/20 transition hover:-translate-y-0.5 hover:bg-[#7138A3]"
         >
           Ingresar
         </Link>

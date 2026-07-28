@@ -1,206 +1,216 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { motion } from "motion/react";
+import {
+  ComposableMap,
+  Geographies,
+  Geography,
+  Marker,
+} from "react-simple-maps";
+
 import Container from "@/components/ui/container";
+import { activeMapCountries } from "@/config/map-countries";
 
+const geographyUrl =
+  "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
- const countries = [
-  {
-    id: "colombia",
-    name: "Colombia",
-    href: "/pais/colombia",
-    x: 300,
-    y: 255,
-    width: 34,
-    height: 54,
-    color: "#F4C542",
-  },
-  {
-    id: "panama",
-    name: "Panamá",
-    href: "/pais/panama",
-    x: 270,
-    y: 235,
-    width: 26,
-    height: 18,
-    color: "#E53935",
-  },
-  {
-    id: "brasil",
-    name: "Brasil",
-    href: "#",
-    x: 340,
-    y: 280,
-    width: 90,
-    height: 95,
-    color: "#2E8B57",
-  },
-  {
-    id: "mexico",
-    name: "México",
-    href: "#",
-    x: 180,
-    y: 170,
-    width: 70,
-    height: 40,
-    color: "#3CB371",
-  },
-  {
-    id: "argentina",
-    name: "Argentina",
-    href: "#",
-    x: 350,
-    y: 390,
-    width: 38,
-    height: 95,
-    color: "#6CB4EE",
-  },
-  {
-    id: "espana",
-    name: "España",
-    href: "#",
-    x: 560,
-    y: 170,
-    width: 36,
-    height: 24,
-    color: "#C95A49",
-  },
-  {
-    id: "francia",
-    name: "Francia",
-    href: "#",
-    x: 600,
-    y: 160,
-    width: 30,
-    height: 28,
-    color: "#4F7CAC",
-  },
-  {
-  id: "paises-bajos",
-  name: "Países Bajos",
-  href: "/pais/paises-bajos",
-  x: 610,
-  y: 150,
-  width: 20,
-  height: 20,
-  color: "#FF6F00",
-},
-  {
-    id: "alemania",
-    name: "Alemania",
-    href: "#",
-    x: 630,
-    y: 150,
-    width: 26,
-    height: 36,
-    color: "#777777",
-  },
-];
+const activeMapCountriesById = new Map(
+  activeMapCountries.map((country) => [country.geographyId, country])
+);
 
 export default function WorldMap() {
   const router = useRouter();
 
+  const [hoveredCountryId, setHoveredCountryId] = useState<string | null>(
+    null
+  );
+
   return (
-    <section className="py-20">
+    <section className="scroll-mt-24 py-20">
       <Container>
-        <div className="mb-6">
-          <h2 className="text-2xl font-semibold">Análisis político global</h2>
+        <div className="mb-8">
+          <p className="text-sm uppercase tracking-[0.2em] text-[#A970FF]">
+            Presencia internacional
+          </p>
+
+          <h2 className="mt-3 text-3xl font-semibold text-white">
+            Análisis político global
+          </h2>
+
           <p className="mt-3 max-w-2xl text-white/65">
-            Explora el mapa y entra a la ficha política de cada país disponible.
+            Explora los países donde PLANdeC desarrolla análisis político,
+            comunicación estratégica e inteligencia electoral.
           </p>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#0B1020] p-4 shadow-[0_0_40px_rgba(0,0,0,0.25)]">
-          <div className="relative mx-auto aspect-[16/9] w-full max-w-6xl overflow-hidden rounded-xl bg-[radial-gradient(circle_at_center,_rgba(90,45,130,0.18),_transparent_45%),linear-gradient(180deg,_#0E152B_0%,_#09101F_100%)]">
-            <svg
-              viewBox="0 0 1000 560"
-              className="h-full w-full"
-              xmlns="http://www.w3.org/2000/svg"
+        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#0B1020] p-4 shadow-[0_0_40px_rgba(0,0,0,0.25)] md:p-8">
+          <div className="mx-auto max-w-6xl overflow-hidden rounded-xl bg-[radial-gradient(circle_at_center,_rgba(90,45,130,0.18),_transparent_48%),linear-gradient(180deg,_#0E152B_0%,_#09101F_100%)]">
+            <ComposableMap
+              projectionConfig={{
+                rotate: [-10, 0, 0],
+                scale: 155,
+              }}
+              width={900}
+              height={410}
+              className="h-auto w-full"
             >
-              <defs>
-                <filter id="glow">
-                  <feGaussianBlur stdDeviation="6" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
+              <Geographies geography={geographyUrl}>
+                {({ geographies }) =>
+                  geographies.map((geography) => {
+                    const geographyId = String(geography.id).padStart(3, "0");
 
-              <ellipse cx="500" cy="280" rx="420" ry="180" fill="rgba(90,45,130,0.08)" />
+                    const activeCountry =
+                      activeMapCountriesById.get(geographyId);
 
-              <path
-                d="M120 150 C170 120, 260 120, 330 170 C360 190, 380 220, 390 260 C400 300, 390 340, 360 370 C320 410, 250 430, 210 410 C170 390, 130 340, 120 300 C110 250, 95 190, 120 150 Z"
-                fill="#18243D"
-                stroke="rgba(255,255,255,0.08)"
-              />
+                    const isActive = Boolean(activeCountry);
 
-              <path
-                d="M500 140 C570 120, 680 120, 760 150 C840 180, 900 230, 910 280 C920 340, 880 390, 810 410 C730 430, 620 420, 560 390 C510 365, 490 320, 485 270 C480 220, 455 160, 500 140 Z"
-                fill="#18243D"
-                stroke="rgba(255,255,255,0.08)"
-              />
+                    const isHovered =
+                      Boolean(activeCountry) &&
+                      hoveredCountryId === activeCountry?.geographyId;
 
-              <path
-                d="M760 390 C790 380, 860 390, 900 420 C930 445, 930 480, 900 500 C860 525, 790 520, 760 495 C735 470, 730 420, 760 390 Z"
-                fill="#18243D"
-                stroke="rgba(255,255,255,0.08)"
-              />
+                    return (
+                      <Geography
+                        key={geography.rsmKey}
+                        geography={geography}
+                        onClick={() => {
+                          if (activeCountry) {
+                            router.push(activeCountry.href);
+                          }
+                        }}
+                        onMouseEnter={() => {
+                          if (activeCountry) {
+                            setHoveredCountryId(
+                              activeCountry.geographyId
+                            );
+                          }
+                        }}
+                        onMouseLeave={() => {
+                          setHoveredCountryId(null);
+                        }}
+                        tabIndex={isActive ? 0 : -1}
+                        role={isActive ? "link" : undefined}
+                        aria-label={
+                          isActive
+                            ? `Abrir información política de ${activeCountry?.name}`
+                            : undefined
+                        }
+                        onKeyDown={(event) => {
+                          if (
+                            activeCountry &&
+                            (event.key === "Enter" ||
+                              event.key === " ")
+                          ) {
+                            event.preventDefault();
+                            router.push(activeCountry.href);
+                          }
+                        }}
+                        fill={activeCountry?.color ?? "#253149"}
+                        stroke="#0B1020"
+                        strokeWidth={0.65}
+                       style={{
+  default: {
+    fill: isHovered
+      ? "#A970FF"
+      : activeCountry?.color ?? "#253149",
+    outline: "none",
+    cursor: isActive ? "pointer" : "default",
+    filter: isHovered
+      ? "drop-shadow(0 0 10px rgba(169, 112, 255, 0.95))"
+      : "none",
 
-              {countries.map((country) => {
-                const clickable = country.href !== "#";
+    transform: isHovered ? "scale(1.18)" : "scale(1)",
+    transformBox: "fill-box",
+    transformOrigin: "center",
 
-                return (
-                  <foreignObject
-                    key={country.id}
-                    x={country.x}
-                    y={country.y}
-                    width={country.width}
-                    height={country.height}
-                    style={{ overflow: "visible" }}
-                  >
-                    <motion.button
-                      whileHover={{
-                        scale: 1.18,
-                        y: -3,
-                      }}
-                      whileTap={{ scale: 0.98 }}
-                      transition={{ type: "spring", stiffness: 260, damping: 18 }}
-                      onClick={() => {
-                        if (clickable) router.push(country.href);
-                      }}
-                      className={`group relative flex h-full w-full items-center justify-center rounded-md border text-[10px] font-semibold text-white shadow-lg ${
-                        clickable ? "cursor-pointer" : "cursor-default"
-                      }`}
-                      style={{
-                        backgroundColor: country.color,
-                        borderColor: "rgba(255,255,255,0.25)",
-                        filter: clickable ? "url(#glow)" : "none",
-                      }}
-                      title={country.name}
-                    >
-                      <span className="absolute -top-8 left-1/2 -translate-x-1/2 rounded-full border border-white/10 bg-[#050816] px-3 py-1 text-xs text-white opacity-0 transition group-hover:opacity-100">
-                        {country.name}
-                      </span>
-                    </motion.button>
-                  </foreignObject>
-                );
-              })}
-            </svg>
+    transition:
+      "fill 180ms ease, filter 180ms ease, transform 180ms ease",
+  },
+
+  hover: {
+    fill: activeCountry ? "#A970FF" : "#253149",
+    outline: "none",
+    cursor: isActive ? "pointer" : "default",
+    filter: activeCountry
+      ? "drop-shadow(0 0 10px rgba(169, 112, 255, 0.95))"
+      : "none",
+
+    transform: activeCountry ? "scale(1.18)" : "scale(1)",
+    transformBox: "fill-box",
+    transformOrigin: "center",
+  },
+
+  pressed: {
+    fill: activeCountry?.color ?? "#253149",
+    outline: "none",
+
+    transform: activeCountry ? "scale(1.1)" : "scale(1)",
+    transformBox: "fill-box",
+    transformOrigin: "center",
+  },
+}}
+                      />
+                    );
+                  })
+                }
+              </Geographies>
+
+             {activeMapCountries.map((country) => {
+  const isHovered =
+    hoveredCountryId === country.geographyId;
+
+  return (
+    <Marker
+      key={country.slug}
+      coordinates={country.coordinates}
+    >
+      <g
+        onMouseEnter={() =>
+          setHoveredCountryId(country.geographyId)
+        }
+        onMouseLeave={() =>
+          setHoveredCountryId(null)
+        }
+        onClick={() => router.push(country.href)}
+        className="cursor-pointer"
+      >
+        <circle
+          r={isHovered ? 4 : 3}
+          fill={isHovered ? "#A970FF" : country.color}
+          stroke="#FFFFFF"
+          strokeWidth={1.2}
+          style={{
+            transition:
+              "r 180ms ease, fill 180ms ease",
+          }}
+        />
+
+        <text
+          textAnchor="middle"
+          y={country.labelOffset}
+          className="fill-white text-[11px] font-semibold"
+          style={{
+            paintOrder: "stroke",
+            stroke: "#09101F",
+            strokeWidth: 3,
+            strokeLinejoin: "round",
+
+            transform: isHovered
+              ? "scale(1.08)"
+              : "scale(1)",
+            transformBox: "fill-box",
+            transformOrigin: "center",
+            transition: "transform 180ms ease",
+          }}
+        >
+          {country.name}
+        </text>
+      </g>
+    </Marker>
+  );
+})}
+            </ComposableMap>
           </div>
-
-          <div className="mt-4 flex flex-wrap gap-3 text-sm text-white/65">
-  <span className="rounded-full border border-white/10 px-3 py-1">
-    Colombia activa
-  </span>
-  <span className="rounded-full border border-white/10 px-3 py-1">
-    Panamá activa
-  </span>
-  <span className="rounded-full border border-white/10 px-3 py-1">
-    Clic en el país para abrir su ficha
-  </span>
-</div>
         </div>
       </Container>
     </section>

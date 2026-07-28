@@ -17,10 +17,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className="min-h-screen bg-[#050816] text-white antialiased">
-        <div className="flex min-h-screen flex-col">
+      <body className="min-h-screen text-[#2A2140] antialiased">
+       <div className="flex min-h-screen flex-col bg-transparent">
           <Navbar />
-          <main className="flex-1">{children}</main>
+         <main className="flex-1 bg-transparent">{children}</main>
           <Footer />
           <ChatWidget />
         </div>

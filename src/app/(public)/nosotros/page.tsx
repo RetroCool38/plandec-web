@@ -10,11 +10,11 @@ export default function NosotrosPage() {
           Nosotros
         </p>
 
-        <h1 className="mt-4 text-4xl font-bold text-white">
+       <h1 className="mt-4 text-4xl font-bold text-[#2A2140]">
           Estrategia política, comunicación y tecnología con visión de futuro
         </h1>
 
-        <p className="mt-6 text-lg leading-8 text-white/70">
+        <p className="mt-6 text-lg leading-8 text-[#5F5868]">
           PLANdeC es una firma orientada al análisis político, la estrategia de
           posicionamiento y la construcción de comunicación pública con visión
           territorial, electoral e institucional. Integramos estrategia,
@@ -22,39 +22,43 @@ export default function NosotrosPage() {
           organizaciones y proyectos políticos de forma estructurada y efectiva.
         </p>
       </div>
+<section className="mt-16 grid gap-8 lg:grid-cols-2">
+  <div className="rounded-2xl border border-[#D9C7E8] bg-white/80 p-8 shadow-xl shadow-[#5A2D82]/10 backdrop-blur-sm">
+    <h2 className="text-2xl font-semibold text-[#2A2140]">
+      Visión
+    </h2>
 
-      <section className="mt-16 grid gap-8 lg:grid-cols-2">
-        <div className="rounded-2xl border border-white/10 bg-[#0B1020] p-8">
-          <h2 className="text-2xl font-semibold text-white">Visión</h2>
-          <p className="mt-4 leading-7 text-white/70">
-            Nuestra visión es ayudarte a alcanzar tus objetivos y consolidarte
-            como un referente dentro de tu sector. Al mismo tiempo, buscamos
-            consolidar a PLANdeC como una de las firmas jóvenes de referencia en
-            el ámbito de la comunicación y el marketing político, tanto a nivel
-            local como iberoamericano.
-          </p>
-        </div>
+    <p className="mt-4 leading-7 text-[#5F5868]">
+      Nuestra visión es ayudarte a alcanzar tus objetivos y consolidarte
+      como un referente dentro de tu sector. Al mismo tiempo, buscamos
+      consolidar a PLANdeC como una de las firmas jóvenes de referencia en
+      el ámbito de la comunicación y el marketing político, tanto a nivel
+      local como iberoamericano.
+    </p>
+  </div>
 
-        <div className="rounded-2xl border border-white/10 bg-[#0B1020] p-8">
-          <h2 className="text-2xl font-semibold text-white">
-            Enfoque estratégico
-          </h2>
-          <p className="mt-4 leading-7 text-white/70">
-            Nos enfocamos en el desarrollo de campañas permanentes con el fin de
-            ingresar en la mente del elector y posicionarte como una opción real
-            dentro del abanico de candidatos existente. Trabajamos para ayudarte
-            a convertirte en la alternativa más adecuada para tus electores.
-          </p>
-          <p className="mt-4 leading-7 text-white/70">
-            En el ámbito institucional, buscamos posicionar a tu organización en
-            la percepción y recordación de la comunidad, con el fin de mejorar
-            la imagen que se tiene de ella y fortalecer su legitimidad pública.
-          </p>
-        </div>
-      </section>
+  <div className="rounded-2xl border border-[#D9C7E8] bg-white/80 p-8 shadow-xl shadow-[#5A2D82]/10 backdrop-blur-sm">
+    <h2 className="text-2xl font-semibold text-[#2A2140]">
+      Enfoque estratégico
+    </h2>
+
+    <p className="mt-4 leading-7 text-[#5F5868]">
+      Nos enfocamos en el desarrollo de campañas permanentes con el fin de
+      ingresar en la mente del elector y posicionarte como una opción real
+      dentro del abanico de candidatos existente. Trabajamos para ayudarte
+      a convertirte en la alternativa más adecuada para tus electores.
+    </p>
+
+    <p className="mt-4 leading-7 text-[#5F5868]">
+      En el ámbito institucional, buscamos posicionar a tu organización en
+      la percepción y recordación de la comunidad, con el fin de mejorar
+      la imagen que se tiene de ella y fortalecer su legitimidad pública.
+    </p>
+  </div>
+</section>
 
       <section className="mt-16">
-        <h2 className="text-3xl font-bold text-white">Nuestros pilares</h2>
+        <h2 className="text-3xl font-bold text-[#2A2140]">Nuestros pilares</h2>
 
         <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {[
@@ -79,10 +83,10 @@ export default function NosotrosPage() {
               key={pillar.title}
               className="rounded-2xl border border-white/10 bg-[#0B1020] p-6"
             >
-              <h3 className="text-xl font-semibold text-white">
+              <h3 className="text-xl font-semibold text-[#2A2140]">
                 {pillar.title}
               </h3>
-              <p className="mt-4 text-sm leading-7 text-white/70">
+              <p className="mt-4 text-sm leading-7 text-[#2A2140]/70">
                 {pillar.text}
               </p>
             </div>
@@ -92,8 +96,8 @@ export default function NosotrosPage() {
 
       <section className="mt-20">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl font-bold text-white">Nuestro equipo</h2>
-          <p className="mt-4 text-white/70">
+          <h2 className="text-3xl font-bold text-[#2A2140]">Nuestro equipo</h2>
+          <p className="mt-4 text-[#2A2140]/70">
             PLANdeC reúne perfiles en estrategia, comunicación, diseño y
             tecnología que trabajan de forma coordinada para desarrollar
             campañas y proyectos políticos con visión estratégica.
@@ -115,16 +119,16 @@ export default function NosotrosPage() {
                 />
 
                 <div>
-                  <h3 className="text-2xl font-bold text-white">
+                  <h3 className="text-2xl font-bold text-[#2A2140]">
                     {member.name}
                   </h3>
                   <p className="mt-1 font-medium text-[#A970FF]">
                     {member.role}
                   </p>
-                  <p className="mt-4 text-sm leading-7 text-white/70">
+                  <p className="mt-4 text-sm leading-7 text-[#2A2140]/70">
                     {member.shortDescription}
                   </p>
-                  <p className="mt-4 text-sm font-medium text-white/60">
+                  <p className="mt-4 text-sm font-medium text-[#2A2140]/60">
                     Ver perfil completo →
                   </p>
                 </div>
