@@ -1,4 +1,4 @@
-import type { HomeContent } from "../types/content.types";
+import type { HomeContent } from "../../types/content.types";
 
 export const homeContent: HomeContent = {
   hero: {
