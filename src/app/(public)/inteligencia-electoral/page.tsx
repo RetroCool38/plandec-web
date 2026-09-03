@@ -6,6 +6,7 @@ type Position = [number, number];
 type Municipality = { geometry: { coordinates: Position[][] }; properties: { MpCodigo: string; MpNombre: string } };
 type Place = { geometry: { coordinates: Position }; properties: { municipio: string; puesto: string; direccion: string; codigo_municipio_electoral: string; codigo_zona: string; codigo_puesto: string } };
 type Result = { candidato: string; partido: string; codigo: string; votos: number };
+type Election = { id: string; year: number; corporation: string; title: string; label: string; file: string; places: number };
 
 const W = 900, H = 930;
 const bounds = { minLon: -75.273, maxLon: -74.686, minLat: 10.24, maxLat: 11.11 };
@@ -22,6 +23,9 @@ export default function ElectoralIntelligencePage() {
   const [municipalities, setMunicipalities] = useState<Municipality[]>([]);
   const [places, setPlaces] = useState<Place[]>([]);
   const [results, setResults] = useState<Record<string, Result[]>>({});
+  const [elections, setElections] = useState<Election[]>([]);
+  const [selectedElection, setSelectedElection] = useState("2023-001");
+  const [resultsLoading, setResultsLoading] = useState(false);
   const [municipality, setMunicipality] = useState("TODOS");
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Place | null>(null);
@@ -31,13 +35,30 @@ export default function ElectoralIntelligencePage() {
     Promise.all([
       fetch("/data/municipios_atlantico.geojson").then((response) => response.json()),
       fetch("/data/puestos_votacion_atlantico_2023.geojson").then((response) => response.json()),
-      fetch("/data/resultados_gobernacion_2023.json").then((response) => response.json()),
-    ]).then(([municipalityData, placeData, resultData]) => {
+      fetch("/data/elecciones_atlantico.json").then((response) => response.json()),
+    ]).then(([municipalityData, placeData, electionData]) => {
       setMunicipalities(municipalityData.features);
       setPlaces(placeData.features);
-      setResults(resultData);
+      setElections(electionData);
     }).catch(() => setError("No fue posible cargar la información electoral."));
   }, []);
+
+  const activeElection = elections.find((election) => election.id === selectedElection);
+  const selectedYear = Number(selectedElection.split("-")[0]);
+  const years = useMemo(() => [...new Set(elections.map((election) => election.year))].sort(), [elections]);
+  const electionTypes = useMemo(() => elections.filter((election) => election.year === selectedYear), [elections, selectedYear]);
+
+  useEffect(() => {
+    if (!activeElection) return;
+    setResultsLoading(true);
+    setResults({});
+    setSelected(null);
+    fetch(activeElection.file)
+      .then((response) => response.json())
+      .then(setResults)
+      .catch(() => setError("No fue posible cargar los resultados seleccionados."))
+      .finally(() => setResultsLoading(false));
+  }, [activeElection]);
 
   const names = useMemo(() => [...new Set(places.map((place) => place.properties.municipio))].sort(), [places]);
   const filtered = useMemo(() => places.filter((place) => {
@@ -46,19 +67,26 @@ export default function ElectoralIntelligencePage() {
     return inMunicipality && (!needle || normalize(`${place.properties.puesto} ${place.properties.direccion}`).includes(needle));
   }), [places, municipality, query]);
   const resultKey = selected ? `${selected.properties.codigo_municipio_electoral}-${selected.properties.codigo_zona}-${selected.properties.codigo_puesto}` : "";
-  const candidates = (results[resultKey] || []).filter((result) => !["00996", "00998"].includes(result.codigo)).slice(0, 5);
+  const candidates = (results[resultKey] || []).filter((result) => {
+    const candidateCode = result.codigo.split("-").at(-1) || "";
+    return !["996", "997", "998", "00996", "00997", "00998"].includes(candidateCode);
+  }).slice(0, 5);
 
   return (
     <div className="min-h-[calc(100vh-5rem)] bg-[#F5F1F8] text-[#261B33]">
       <div className="border-b border-[#DDCFE6] bg-white px-5 py-7 lg:px-10">
         <div className="mx-auto flex max-w-[1500px] flex-wrap items-end justify-between gap-4">
-          <div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#7B3FB6]">Inteligencia electoral</p><h1 className="mt-2 font-serif text-3xl font-bold lg:text-4xl">Mapa electoral del Atlántico</h1><p className="mt-2 text-sm text-[#6A6071]">Explora puestos de votación y resultados agregados de Gobernación 2023.</p></div>
-          <div className="flex gap-3"><div className="border-l-2 border-[#7B3FB6] bg-[#F6F0FA] px-4 py-2"><strong className="block text-xl">{places.length || "—"}</strong><span className="text-xs text-[#6A6071]">puestos</span></div><div className="border-l-2 border-[#C99A34] bg-[#FCF8EF] px-4 py-2"><strong className="block text-xl">23</strong><span className="text-xs text-[#6A6071]">municipios</span></div></div>
+          <div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#7B3FB6]">Inteligencia electoral</p><h1 className="mt-2 font-serif text-3xl font-bold lg:text-4xl">Mapa electoral del Atlántico</h1><p className="mt-2 text-sm text-[#6A6071]">Compara resultados por puesto de las elecciones territoriales de 2019 y 2023 y del Congreso de 2026.</p></div>
+          <div className="flex gap-3"><div className="border-l-2 border-[#7B3FB6] bg-[#F6F0FA] px-4 py-2"><strong className="block text-xl">{activeElection?.places || "—"}</strong><span className="text-xs text-[#6A6071]">puestos con resultados</span></div><div className="border-l-2 border-[#C99A34] bg-[#FCF8EF] px-4 py-2"><strong className="block text-xl">23</strong><span className="text-xs text-[#6A6071]">municipios</span></div></div>
         </div>
       </div>
 
       <div className="mx-auto grid max-w-[1500px] lg:grid-cols-[340px_minmax(0,1fr)]">
         <aside className="flex max-h-[760px] flex-col border-r border-[#DDCFE6] bg-white p-5 lg:min-h-[760px]">
+          <div className="mb-5 grid grid-cols-2 gap-3 rounded-xl bg-[#F6F0FA] p-3">
+            <div><label className="mb-2 block text-xs font-bold" htmlFor="anio">Año</label><select id="anio" value={selectedYear} onChange={(event) => { const year = Number(event.target.value); const first = elections.find((election) => election.year === year); if (first) setSelectedElection(first.id); }} className="h-10 w-full rounded-lg border border-[#D9CEE1] bg-white px-2 text-sm font-semibold outline-none focus:border-[#7B3FB6]">{years.map((year) => <option key={year}>{year}</option>)}</select></div>
+            <div><label className="mb-2 block text-xs font-bold" htmlFor="corporacion">Elección</label><select id="corporacion" value={selectedElection} onChange={(event) => setSelectedElection(event.target.value)} className="h-10 w-full rounded-lg border border-[#D9CEE1] bg-white px-2 text-sm font-semibold outline-none focus:border-[#7B3FB6]">{electionTypes.map((election) => <option key={election.id} value={election.id}>{election.title}</option>)}</select></div>
+          </div>
           <label className="mb-2 text-xs font-bold" htmlFor="municipio">Municipio</label>
           <select id="municipio" value={municipality} onChange={(event) => { setMunicipality(event.target.value); setSelected(null); }} className="mb-4 h-11 rounded-lg border border-[#D9CEE1] bg-white px-3 text-sm outline-none focus:border-[#7B3FB6]">
             <option value="TODOS">Todos los municipios</option>{names.map((name) => <option key={name}>{name}</option>)}
@@ -84,8 +112,8 @@ export default function ElectoralIntelligencePage() {
             <button onClick={() => setSelected(null)} className="absolute right-4 top-3 h-8 w-8 rounded-full bg-[#F1ECF4] text-sm" aria-label="Cerrar">×</button>
             <p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#7B3FB6]">Puesto de votación</p><h2 className="mr-8 mt-2 font-serif text-2xl font-bold leading-tight">{selected.properties.puesto}</h2><p className="mt-3 border-b border-[#E8E0EC] pb-4 text-sm text-[#6A6071]">{selected.properties.direccion}</p>
             <dl className="my-3 text-xs"><div className="flex justify-between border-b border-[#EEE8F1] py-2"><dt>Municipio</dt><dd className="font-bold">{selected.properties.municipio}</dd></div><div className="flex justify-between border-b border-[#EEE8F1] py-2"><dt>Zona / puesto</dt><dd className="font-bold">{selected.properties.codigo_zona} / {selected.properties.codigo_puesto}</dd></div></dl>
-            <div className="mt-5 flex items-end justify-between"><h3 className="font-serif font-bold">Gobernación 2023</h3><span className="text-[10px] text-[#756A7B]">votos por puesto</span></div>
-            <div className="mt-2">{candidates.map((candidate, index) => <div key={candidate.codigo} className="grid grid-cols-[24px_1fr_auto] items-center gap-2 border-b border-[#EEE8F1] py-2"><span className="grid h-6 w-6 place-items-center rounded-full bg-[#F1E7F7] text-[10px] font-bold text-[#5A2D82]">{index + 1}</span><span><strong className="block text-[11px] leading-tight">{candidate.candidato}</strong><small className="mt-1 block text-[9px] text-[#756A7B]">{candidate.partido}</small></span><b className="text-sm">{candidate.votos.toLocaleString("es-CO")}</b></div>)}</div>
+            <div className="mt-5 flex items-end justify-between"><h3 className="font-serif font-bold">{activeElection?.label}</h3><span className="text-[10px] text-[#756A7B]">votos por puesto</span></div>
+            <div className="mt-2">{resultsLoading ? <p className="py-6 text-center text-xs text-[#756A7B]">Cargando resultados…</p> : candidates.length ? candidates.map((candidate, index) => <div key={candidate.codigo} className="grid grid-cols-[24px_1fr_auto] items-center gap-2 border-b border-[#EEE8F1] py-2"><span className="grid h-6 w-6 place-items-center rounded-full bg-[#F1E7F7] text-[10px] font-bold text-[#5A2D82]">{index + 1}</span><span><strong className="block text-[11px] leading-tight">{candidate.candidato}</strong><small className="mt-1 block text-[9px] text-[#756A7B]">{candidate.partido}</small></span><b className="text-sm">{candidate.votos.toLocaleString("es-CO")}</b></div>) : <p className="py-6 text-center text-xs text-[#756A7B]">Este puesto no tiene resultados asociados para la elección seleccionada.</p>}</div>
             <p className="mt-4 text-center text-[10px] text-[#756A7B]">Resultados agregados de todas las mesas del puesto.</p>
           </aside>}
         </section>
