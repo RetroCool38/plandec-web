@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, type KeyboardEvent } from "react";
+import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   ComposableMap,
@@ -55,15 +56,15 @@ export default function WorldMap() {
           </p>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-[#D9C7E8] bg-white/70 p-4 shadow-xl shadow-[#5A2D82]/10 backdrop-blur-sm md:p-8">
-          <div className="mx-auto max-w-6xl overflow-hidden rounded-xl bg-[radial-gradient(circle_at_center,_rgba(90,45,130,0.18),_transparent_48%),linear-gradient(180deg,_#0E152B_0%,_#09101F_100%)]">
+        <div className="overflow-hidden rounded-3xl border border-[#D9C7E8] bg-white/75 p-3 shadow-xl shadow-[#5A2D82]/10 backdrop-blur-sm md:p-6">
+          <div className="mx-auto max-w-6xl overflow-hidden rounded-2xl bg-[radial-gradient(circle_at_47%_40%,_rgba(116,72,157,0.25),_transparent_42%),linear-gradient(180deg,_#131B34_0%,_#09101F_100%)]">
             <ComposableMap
               projectionConfig={{
                 rotate: [-10, 0, 0],
-                scale: 155,
+                scale: 150,
               }}
               width={900}
-              height={410}
+              height={350}
               className="h-auto w-full"
             >
               <Geographies geography={geographyUrl}>
@@ -184,10 +185,10 @@ export default function WorldMap() {
                       className="cursor-pointer"
                     >
                       <circle
-                        r={isHovered ? 4 : 3}
+                        r={isHovered ? 6 : 4.5}
                         fill={isHovered ? "#A970FF" : country.color}
                         stroke="#FFFFFF"
-                        strokeWidth={1.2}
+                        strokeWidth={2}
                         style={{
                           transition: "r 180ms ease, fill 180ms ease",
                         }}
@@ -196,7 +197,8 @@ export default function WorldMap() {
                       <text
                         textAnchor="middle"
                         y={country.labelOffset}
-                        className="fill-white text-[11px] font-semibold"
+                        x={country.labelOffsetX}
+                        className="fill-white text-[10px] font-semibold md:text-[11px]"
                         style={{
                           paintOrder: "stroke",
                           stroke: "#09101F",
@@ -217,6 +219,24 @@ export default function WorldMap() {
                 );
               })}
             </ComposableMap>
+          </div>
+
+          <div className="grid gap-3 p-2 pt-5 md:grid-cols-3 md:p-0 md:pt-5">
+            {activeMapCountries.map((country) => (
+              <Link
+                key={country.slug}
+                href={country.href}
+                onMouseEnter={() => setHoveredCountryName(country.geographyName)}
+                onMouseLeave={() => setHoveredCountryName(null)}
+                className="group flex items-start gap-3 rounded-xl border border-[#E4D7EC] bg-white px-4 py-4 transition hover:-translate-y-0.5 hover:border-[#9D6CC5] hover:shadow-md"
+              >
+                <span className="mt-1 h-3 w-3 shrink-0 rounded-full ring-4 ring-[#F2EAF7]" style={{ backgroundColor: country.color }} />
+                <span>
+                  <strong className="block text-sm text-[#2A2140] group-hover:text-[#5A2D82]">{country.name}</strong>
+                  <small className="mt-1 block leading-5 text-[#6A6071]">{country.description}</small>
+                </span>
+              </Link>
+            ))}
           </div>
         </div>
       </Container>

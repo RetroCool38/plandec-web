@@ -7,18 +7,19 @@ export default function NewsSection() {
     <section className="mt-20">
       <div className="flex items-end justify-between gap-6">
         <div>
-          <h2 className="text-2xl font-bold text-white">
-            Noticias estratégicas
+          <p className="text-sm uppercase tracking-[0.2em] text-[#7B3FB6]">Lectura del contexto</p>
+          <h2 className="mt-3 text-3xl font-semibold text-[#2A2140]">
+            Actualidad política internacional
           </h2>
-          <p className="mt-3 max-w-2xl text-white/65">
-            Coyuntura, análisis y lectura política preparados para evolucionar
-            hacia contenido editorial conectado a CMS.
+          <p className="mt-3 max-w-2xl text-[#5F5868]">
+            Hechos relevantes, resumidos y vinculados a su fuente para facilitar
+            una lectura rápida y confiable.
           </p>
         </div>
 
         <Link
           href="/noticias"
-          className="text-sm font-medium text-[#A970FF] transition hover:text-white"
+          className="text-sm font-semibold text-[#6F3898] transition hover:text-[#2A2140]"
         >
           Ver todas
         </Link>
@@ -30,10 +31,10 @@ export default function NewsSection() {
             key={news.id}
             slug={news.slug}
             title={news.title}
-            country={news.country}
+            country={news.countryLabel}
             date={news.date}
             summary={news.summary}
-            image={news.image}
+            source={news.source}
           />
         ))}
       </div>

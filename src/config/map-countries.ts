@@ -6,6 +6,8 @@ export type MapCountry = {
   color: string;
   coordinates: [number, number];
   labelOffset: number;
+  labelOffsetX: number;
+  description: string;
 };
 
 export const activeMapCountries: MapCountry[] = [
@@ -17,6 +19,8 @@ export const activeMapCountries: MapCountry[] = [
     color: "#F4C542",
     coordinates: [-74.3, 4.5],
     labelOffset: 20,
+    labelOffsetX: 7,
+    description: "Inteligencia electoral y análisis territorial",
   },
   {
     geographyName: "Panama",
@@ -26,6 +30,8 @@ export const activeMapCountries: MapCountry[] = [
     color: "#E53935",
     coordinates: [-80.1, 8.6],
     labelOffset: 17,
+    labelOffsetX: -7,
+    description: "Gobernabilidad, economía y comunicación pública",
   },
   {
     geographyName: "Netherlands",
@@ -35,6 +41,8 @@ export const activeMapCountries: MapCountry[] = [
     color: "#FF6F00",
     coordinates: [5.4, 52.2],
     labelOffset: 17,
+    labelOffsetX: 0,
+    description: "Política europea y dinámica parlamentaria",
   },
 ];
 

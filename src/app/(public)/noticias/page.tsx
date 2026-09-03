@@ -24,10 +24,11 @@ export default function NoticiasPage() {
   return (
     <Container className="py-16">
       <div className="max-w-3xl">
-        <h1 className="text-4xl font-bold text-white">Noticias</h1>
-        <p className="mt-4 text-white/65">
-          Seguimiento de coyuntura, análisis político y contenido estratégico
-          organizado por país.
+        <p className="text-sm uppercase tracking-[0.2em] text-[#7B3FB6]">Actualidad internacional</p>
+        <h1 className="mt-3 text-4xl font-bold text-[#251B38]">Noticias</h1>
+        <p className="mt-4 text-[#625A69]">
+          Una selección de los hechos políticos más relevantes en los países
+          donde PLANdeC mantiene presencia y análisis.
         </p>
       </div>
 
@@ -43,7 +44,7 @@ export default function NoticiasPage() {
               className={`rounded-full border px-4 py-2 text-sm transition ${
                 isActive
                   ? "border-[#5A2D82] bg-[#5A2D82] text-white"
-                  : "border-white/10 bg-transparent text-white/70 hover:border-white/20 hover:text-white"
+                  : "border-[#CDB9DC] bg-white/60 text-[#5F5868] hover:border-[#8B55B2] hover:text-[#5A2D82]"
               }`}
             >
               {filter.label}
@@ -58,10 +59,10 @@ export default function NoticiasPage() {
             key={news.id}
             slug={news.slug}
             title={news.title}
-            country={news.country}
+            country={news.countryLabel}
             date={news.date}
             summary={news.summary}
-            image={news.image}
+            source={news.source}
           />
         ))}
       </div>
