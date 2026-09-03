@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 
 type Position = [number, number];
 type Municipality = { geometry: { coordinates: Position[][] }; properties: { MpCodigo: string; MpNombre: string } };
@@ -33,7 +34,7 @@ export default function ElectoralIntelligencePage() {
   const [pendingYear, setPendingYear] = useState(2023);
   const [pendingElection, setPendingElection] = useState("2023-001");
   const [resultsLoading, setResultsLoading] = useState(false);
-  const [municipality, setMunicipality] = useState("TODOS");
+  const [municipality, setMunicipality] = useState("BARRANQUILLA");
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Place | null>(null);
   const [error, setError] = useState("");
@@ -83,19 +84,20 @@ export default function ElectoralIntelligencePage() {
       <div className="border-b border-[#CDAFDC] bg-gradient-to-r from-[#F8F2FB] via-[#EAD8F3] to-[#DCC1EA] px-5 py-7 lg:px-10">
         <div className="mx-auto flex max-w-[1500px] flex-wrap items-end justify-between gap-4">
           <div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#7B3FB6]">Inteligencia electoral</p><h1 className="mt-2 font-serif text-3xl font-bold lg:text-4xl">Mapa electoral del Atlántico</h1><p className="mt-2 text-sm text-[#6A6071]">Compara resultados por puesto de las elecciones territoriales de 2019 y 2023 y del Congreso de 2026.</p></div>
-          <div className="flex gap-3"><div className="border-l-2 border-[#7B3FB6] bg-[#F6F0FA] px-4 py-2"><strong className="block text-xl">{activeElection?.places || "—"}</strong><span className="text-xs text-[#6A6071]">puestos con resultados</span></div><div className="border-l-2 border-[#C99A34] bg-[#FCF8EF] px-4 py-2"><strong className="block text-xl">23</strong><span className="text-xs text-[#6A6071]">municipios</span></div></div>
+          <div className="flex flex-wrap gap-3"><Link href="/inteligencia-electoral/dashboard" className="grid place-items-center rounded-lg bg-[#5A2D82] px-5 py-2 text-sm font-bold text-white shadow-md">Ver dashboard</Link><div className="border-l-2 border-[#7B3FB6] bg-[#F6F0FA] px-4 py-2"><strong className="block text-xl">{activeElection?.places || "—"}</strong><span className="text-xs text-[#6A6071]">puestos con resultados</span></div><div className="border-l-2 border-[#C99A34] bg-[#FCF8EF] px-4 py-2"><strong className="block text-xl">23</strong><span className="text-xs text-[#6A6071]">municipios</span></div></div>
         </div>
       </div>
 
       <div className="mx-auto grid max-w-[1500px] lg:grid-cols-[340px_minmax(0,1fr)]">
         <aside className="flex max-h-[760px] flex-col border-r border-[#C9ADD8] bg-[#FBF8FC] p-5 lg:min-h-[760px]">
           <form onSubmit={(event) => { event.preventDefault(); setSelectedElection(pendingElection); }} className="mb-5 rounded-xl border border-[#DFCDE9] bg-[#F3E8F8] p-3 shadow-sm">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div><label className="mb-2 block text-xs font-bold" htmlFor="departamento">Departamento</label><select id="departamento" value="03" disabled className="h-10 w-full rounded-lg border border-[#CDB7D9] bg-white px-2 text-sm font-semibold text-[#34283E] disabled:opacity-100"><option value="03">Atlántico</option></select></div>
               <div><label className="mb-2 block text-xs font-bold" htmlFor="anio">Año</label><select id="anio" value={pendingYear} onChange={(event) => { const year = Number(event.target.value); const first = elections.find((election) => election.year === year); setPendingYear(year); if (first) setPendingElection(first.id); }} className="h-10 w-full rounded-lg border border-[#CDB7D9] bg-white px-2 text-sm font-semibold outline-none focus:border-[#7B3FB6]">{years.map((year) => <option key={year}>{year}</option>)}</select></div>
               <div><label className="mb-2 block text-xs font-bold" htmlFor="corporacion">Cargo o corporación</label><select id="corporacion" value={pendingElection} onChange={(event) => setPendingElection(event.target.value)} className="h-10 w-full rounded-lg border border-[#CDB7D9] bg-white px-2 text-sm font-semibold outline-none focus:border-[#7B3FB6]">{electionTypes.map((election) => <option key={election.id} value={election.id}>{electionOptionLabel(election.title)}</option>)}</select></div>
             </div>
             <button type="submit" className="mt-3 w-full rounded-lg bg-[#5A2D82] px-4 py-3 text-sm font-bold text-white shadow-md shadow-[#5A2D82]/20 transition hover:bg-[#7138A3]">Consultar resultados</button>
-            <p className="mt-2 text-center text-[11px] text-[#6A6071]">Consulta activa: <strong className="text-[#5A2D82]">{activeElection?.label || "Cargando…"}</strong></p>
+            <p className="mt-2 text-center text-[11px] text-[#6A6071]">Consulta activa: <strong className="text-[#5A2D82]">Atlántico · {activeElection?.label || "Cargando…"}</strong></p>
           </form>
           <label className="mb-2 text-xs font-bold" htmlFor="municipio">Municipio</label>
           <select id="municipio" value={municipality} onChange={(event) => { setMunicipality(event.target.value); setSelected(null); }} className="mb-4 h-11 rounded-lg border border-[#D9CEE1] bg-white px-3 text-sm outline-none focus:border-[#7B3FB6]">

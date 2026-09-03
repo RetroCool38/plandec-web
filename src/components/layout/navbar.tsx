@@ -19,7 +19,10 @@ const navLinks: NavItem[] = [
   { label: "Inicio", href: "/" },
   { label: "Nosotros", href: "/nosotros" },
   { label: "Soluciones", href: "/soluciones" },
-  { label: "Inteligencia electoral", href: "/inteligencia-electoral" },
+  { label: "Inteligencia electoral", href: "/inteligencia-electoral", children: [
+    { label: "Mapa electoral", href: "/inteligencia-electoral" },
+    { label: "Dashboard y tendencias", href: "/inteligencia-electoral/dashboard" },
+  ] },
   {
     label: "Noticias",
     href: "/noticias",
