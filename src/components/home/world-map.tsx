@@ -56,8 +56,8 @@ export default function WorldMap() {
           </p>
         </div>
 
-        <div className="overflow-hidden rounded-3xl border border-[#D9C7E8] bg-white/75 p-3 shadow-xl shadow-[#5A2D82]/10 backdrop-blur-sm md:p-6">
-          <div className="relative mx-auto max-w-6xl overflow-hidden rounded-2xl border border-[#6F4A85] bg-[radial-gradient(circle_at_47%_40%,_rgba(180,126,207,0.32),_transparent_42%),linear-gradient(145deg,_#362447_0%,_#1D142C_100%)] shadow-inner">
+        <div className="grid overflow-hidden rounded-3xl border border-[#D9C7E8] bg-white/80 p-3 shadow-xl shadow-[#5A2D82]/10 backdrop-blur-sm md:p-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-5">
+          <div className="relative overflow-hidden rounded-2xl border border-[#6F4A85] bg-[radial-gradient(circle_at_47%_40%,_rgba(180,126,207,0.32),_transparent_42%),linear-gradient(145deg,_#362447_0%,_#1D142C_100%)] shadow-inner">
             <div className="pointer-events-none absolute left-5 top-5 z-10 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-medium text-white/80 backdrop-blur-sm">Selecciona un país para ver su perfil</div>
             <ComposableMap
               projectionConfig={{
@@ -65,8 +65,8 @@ export default function WorldMap() {
                 scale: 150,
               }}
               width={900}
-              height={350}
-              className="h-auto w-full"
+              height={430}
+              className="h-full min-h-[360px] w-full"
             >
               <Geographies geography={geographyUrl}>
                {({ geographies }: GeographiesRenderProps) =>
@@ -224,14 +224,18 @@ export default function WorldMap() {
             </ComposableMap>
           </div>
 
-          <div className="grid gap-3 p-2 pt-5 md:grid-cols-3 md:p-0 md:pt-5">
+          <aside className="mt-3 flex flex-col rounded-2xl bg-gradient-to-b from-[#F4EAF9] to-[#E6D3F0] p-5 lg:mt-0">
+            <p className="text-xs font-bold uppercase tracking-[.18em] text-[#7B3FB6]">Territorios de análisis</p>
+            <h3 className="mt-2 text-2xl font-semibold leading-tight text-[#2A2140]">Una lectura local con perspectiva internacional</h3>
+            <p className="mt-3 text-sm leading-6 text-[#625A69]">Accede al perfil político y a los principales indicadores de cada país.</p>
+            <div className="mt-5 grid gap-3">
             {activeMapCountries.map((country) => (
               <Link
                 key={country.slug}
                 href={country.href}
                 onMouseEnter={() => setHoveredCountryName(country.geographyName)}
                 onMouseLeave={() => setHoveredCountryName(null)}
-                className="group flex items-start gap-3 rounded-xl border border-[#E4D7EC] bg-white px-4 py-4 transition hover:-translate-y-0.5 hover:border-[#9D6CC5] hover:shadow-md"
+                className="group flex items-start gap-3 rounded-xl border border-[#D8C3E4] bg-white/90 px-4 py-4 transition hover:-translate-y-0.5 hover:border-[#8B55B2] hover:shadow-md"
               >
                 <span className="mt-1 h-3 w-3 shrink-0 rounded-full ring-4 ring-[#F2EAF7]" style={{ backgroundColor: country.color }} />
                 <span>
@@ -240,7 +244,9 @@ export default function WorldMap() {
                 </span>
               </Link>
             ))}
-          </div>
+            </div>
+            <Link href="/noticias" className="mt-auto pt-5 text-sm font-bold text-[#5A2D82] hover:text-[#2A2140]">Ver actualidad por país →</Link>
+          </aside>
         </div>
       </Container>
     </section>

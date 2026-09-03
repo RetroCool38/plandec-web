@@ -11,6 +11,11 @@ type Election = { id: string; year: number; corporation: string; title: string; 
 const W = 900, H = 930;
 const bounds = { minLon: -75.273, maxLon: -74.686, minLat: 10.24, maxLat: 11.11 };
 const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+const electionOptionLabel = (title: string) => ({
+  "Gobernación": "Gobernador",
+  "Alcaldía": "Alcalde",
+  "Concejo": "Concejo / concejales",
+}[title] || title);
 const project = ([lon, lat]: Position): Position => [
   ((lon - bounds.minLon) / (bounds.maxLon - bounds.minLon)) * W,
   H - ((lat - bounds.minLat) / (bounds.maxLat - bounds.minLat)) * H,
@@ -25,6 +30,8 @@ export default function ElectoralIntelligencePage() {
   const [results, setResults] = useState<Record<string, Result[]>>({});
   const [elections, setElections] = useState<Election[]>([]);
   const [selectedElection, setSelectedElection] = useState("2023-001");
+  const [pendingYear, setPendingYear] = useState(2023);
+  const [pendingElection, setPendingElection] = useState("2023-001");
   const [resultsLoading, setResultsLoading] = useState(false);
   const [municipality, setMunicipality] = useState("TODOS");
   const [query, setQuery] = useState("");
@@ -44,9 +51,8 @@ export default function ElectoralIntelligencePage() {
   }, []);
 
   const activeElection = elections.find((election) => election.id === selectedElection);
-  const selectedYear = Number(selectedElection.split("-")[0]);
   const years = useMemo(() => [...new Set(elections.map((election) => election.year))].sort(), [elections]);
-  const electionTypes = useMemo(() => elections.filter((election) => election.year === selectedYear), [elections, selectedYear]);
+  const electionTypes = useMemo(() => elections.filter((election) => election.year === pendingYear), [elections, pendingYear]);
 
   useEffect(() => {
     if (!activeElection) return;
@@ -83,10 +89,14 @@ export default function ElectoralIntelligencePage() {
 
       <div className="mx-auto grid max-w-[1500px] lg:grid-cols-[340px_minmax(0,1fr)]">
         <aside className="flex max-h-[760px] flex-col border-r border-[#C9ADD8] bg-[#FBF8FC] p-5 lg:min-h-[760px]">
-          <div className="mb-5 grid grid-cols-2 gap-3 rounded-xl bg-[#F6F0FA] p-3">
-            <div><label className="mb-2 block text-xs font-bold" htmlFor="anio">Año</label><select id="anio" value={selectedYear} onChange={(event) => { const year = Number(event.target.value); const first = elections.find((election) => election.year === year); if (first) setSelectedElection(first.id); }} className="h-10 w-full rounded-lg border border-[#D9CEE1] bg-white px-2 text-sm font-semibold outline-none focus:border-[#7B3FB6]">{years.map((year) => <option key={year}>{year}</option>)}</select></div>
-            <div><label className="mb-2 block text-xs font-bold" htmlFor="corporacion">Elección</label><select id="corporacion" value={selectedElection} onChange={(event) => setSelectedElection(event.target.value)} className="h-10 w-full rounded-lg border border-[#D9CEE1] bg-white px-2 text-sm font-semibold outline-none focus:border-[#7B3FB6]">{electionTypes.map((election) => <option key={election.id} value={election.id}>{election.title}</option>)}</select></div>
-          </div>
+          <form onSubmit={(event) => { event.preventDefault(); setSelectedElection(pendingElection); }} className="mb-5 rounded-xl border border-[#DFCDE9] bg-[#F3E8F8] p-3 shadow-sm">
+            <div className="grid grid-cols-2 gap-3">
+              <div><label className="mb-2 block text-xs font-bold" htmlFor="anio">Año</label><select id="anio" value={pendingYear} onChange={(event) => { const year = Number(event.target.value); const first = elections.find((election) => election.year === year); setPendingYear(year); if (first) setPendingElection(first.id); }} className="h-10 w-full rounded-lg border border-[#CDB7D9] bg-white px-2 text-sm font-semibold outline-none focus:border-[#7B3FB6]">{years.map((year) => <option key={year}>{year}</option>)}</select></div>
+              <div><label className="mb-2 block text-xs font-bold" htmlFor="corporacion">Cargo o corporación</label><select id="corporacion" value={pendingElection} onChange={(event) => setPendingElection(event.target.value)} className="h-10 w-full rounded-lg border border-[#CDB7D9] bg-white px-2 text-sm font-semibold outline-none focus:border-[#7B3FB6]">{electionTypes.map((election) => <option key={election.id} value={election.id}>{electionOptionLabel(election.title)}</option>)}</select></div>
+            </div>
+            <button type="submit" className="mt-3 w-full rounded-lg bg-[#5A2D82] px-4 py-3 text-sm font-bold text-white shadow-md shadow-[#5A2D82]/20 transition hover:bg-[#7138A3]">Consultar resultados</button>
+            <p className="mt-2 text-center text-[11px] text-[#6A6071]">Consulta activa: <strong className="text-[#5A2D82]">{activeElection?.label || "Cargando…"}</strong></p>
+          </form>
           <label className="mb-2 text-xs font-bold" htmlFor="municipio">Municipio</label>
           <select id="municipio" value={municipality} onChange={(event) => { setMunicipality(event.target.value); setSelected(null); }} className="mb-4 h-11 rounded-lg border border-[#D9CEE1] bg-white px-3 text-sm outline-none focus:border-[#7B3FB6]">
             <option value="TODOS">Todos los municipios</option>{names.map((name) => <option key={name}>{name}</option>)}
