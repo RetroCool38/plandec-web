@@ -14,6 +14,7 @@ const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u0
 const partyStyle = (name: string) => {
   const value = normalize(name);
   const styles = [
+    ["NUEVO LIBERALISMO", "NL", "#E53935"], ["PARTIDO DE LA UNION", "U", "#E8B51B"],
     ["CAMBIO RADICAL", "CR", "#D51F36"], ["PACTO HISTORICO", "PH", "#7A2E8E"],
     ["LIBERAL", "PL", "#D71920"], ["CONSERVADOR", "PC", "#1659A7"],
     ["CENTRO DEMOCRATICO", "CD", "#48A9E6"], ["ALIANZA VERDE", "AV", "#48A942"],
@@ -21,14 +22,30 @@ const partyStyle = (name: string) => {
     ["POLO", "PD", "#F2C500"], ["ASI", "ASI", "#E36B25"],
     ["MIRA", "MI", "#176BB4"], ["NUEVO LIBERALISMO", "NL", "#E53935"],
     ["DIGNIDAD", "DC", "#E05B32"], ["ECOLOGISTA", "PE", "#278A54"],
+    ["EN MARCHA", "EM", "#CF2029"], ["INDEPENDIENTES", "IND", "#E0B51B"],
+    ["SALVACION NACIONAL", "SN", "#1EA6C6"], ["PARTIDO ADA", "ADA", "#219A68"],
+    ["MOVIMIENTO ALTERNATIVO INDIGENA Y SOCIAL", "MAIS", "#C83A21"], ["MAIS", "MAIS", "#C83A21"],
+    ["AUTORIDADES INDIGENAS DE COLOMBIA", "AICO", "#149A8A"], ["AICO", "AICO", "#149A8A"],
+    ["ESPERANZA DEMOCRATICA", "ED", "#55A83F"], ["FUERZA CIUDADANA", "FC", "#E56B2F"],
+    ["COLOMBIA HUMANA", "CH", "#8A3D92"], ["COLOMBIA JUSTA LIBRES", "CJL", "#E14E31"],
+    ["COLOMBIA RENACIENTE", "REN", "#3C9B70"], ["COMUNES", "COM", "#D8303C"],
+    ["PARTIDO COMUNISTA", "PCC", "#C62828"], ["ANTICORRUPCION", "LIGA", "#77A934"],
+    ["PARTIDO DEMOCRATA", "PDC", "#D99A22"], ["LA FUERZA DE LA PAZ", "FP", "#7B2945"],
+    ["GENTE EN MOVIMIENTO", "GTE", "#5CB85C"], ["TODOS SOMOS COLOMBIA", "TSC", "#E4A62B"],
+    ["PARTIDO DEL TRABAJO", "PTC", "#BE1E2D"], ["UNION PATRIOTICA", "UP", "#B9D51B"],
+    ["CREEMOS", "CRE", "#B12567"], ["FUERZA ALTERNATIVA REVOLUCIONARIA", "COM", "#D8303C"],
+    ["ESPERANZA PAZ Y LIBERTAD", "EPL", "#E5C21A"], ["FUERZA DE TODOS", "FT", "#F28C28"],
   ] as const;
   const found = styles.find(([needle]) => value.includes(needle));
-  return found ? { badge: found[1], color: found[2] } : { badge: name.split(/\s+/).filter(Boolean).slice(0, 2).map((word) => word[0]).join(""), color: "#6C4A7D" };
+  if (found) return { badge: found[1], color: found[2] };
+  const palette = ["#6C4A7D", "#2E6F95", "#A14F7A", "#397C6A", "#9A622E", "#5367A5"];
+  const color = palette[[...value].reduce((total, letter) => total + letter.charCodeAt(0), 0) % palette.length];
+  return { badge: name.split(/\s+/).filter(Boolean).slice(0, 2).map((word) => word[0]).join(""), color };
 };
 
 function PartyBadge({ name }: { name: string }) {
   const style = partyStyle(name);
-  return <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-[10px] font-black text-white shadow-sm" style={{ backgroundColor: style.color }}>{style.badge}</span>;
+  return <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border-2 border-white text-[9px] font-black text-white shadow-md ring-1 ring-black/10" style={{ backgroundColor: style.color }}>{style.badge}</span>;
 }
 
 export default function ElectoralDashboardPage() {
