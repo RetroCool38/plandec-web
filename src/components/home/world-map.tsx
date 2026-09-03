@@ -57,7 +57,8 @@ export default function WorldMap() {
         </div>
 
         <div className="overflow-hidden rounded-3xl border border-[#D9C7E8] bg-white/75 p-3 shadow-xl shadow-[#5A2D82]/10 backdrop-blur-sm md:p-6">
-          <div className="mx-auto max-w-6xl overflow-hidden rounded-2xl bg-[radial-gradient(circle_at_47%_40%,_rgba(116,72,157,0.25),_transparent_42%),linear-gradient(180deg,_#131B34_0%,_#09101F_100%)]">
+          <div className="relative mx-auto max-w-6xl overflow-hidden rounded-2xl border border-[#6F4A85] bg-[radial-gradient(circle_at_47%_40%,_rgba(180,126,207,0.32),_transparent_42%),linear-gradient(145deg,_#362447_0%,_#1D142C_100%)] shadow-inner">
+            <div className="pointer-events-none absolute left-5 top-5 z-10 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-medium text-white/80 backdrop-blur-sm">Selecciona un país para ver su perfil</div>
             <ComposableMap
               projectionConfig={{
                 rotate: [-10, 0, 0],
@@ -117,14 +118,14 @@ export default function WorldMap() {
                             router.push(activeCountry.href);
                           }
                         }}
-                        fill={activeCountry?.color ?? "#253149"}
-                        stroke="#0B1020"
+                        fill={activeCountry?.color ?? "#4A3C59"}
+                        stroke="#24172F"
                         strokeWidth={0.65}
                         style={{
                           default: {
                             fill: isHovered
                               ? "#A970FF"
-                              : activeCountry?.color ?? "#253149",
+                              : activeCountry?.color ?? "#4A3C59",
                             outline: "none",
                             cursor: isActive ? "pointer" : "default",
                             filter: isHovered
@@ -139,7 +140,7 @@ export default function WorldMap() {
                               "fill 180ms ease, filter 180ms ease, transform 180ms ease",
                           },
                           hover: {
-                            fill: activeCountry ? "#A970FF" : "#253149",
+                            fill: activeCountry ? "#C58BE2" : "#4A3C59",
                             outline: "none",
                             cursor: isActive ? "pointer" : "default",
                             filter: activeCountry
@@ -194,8 +195,10 @@ export default function WorldMap() {
                         }}
                       />
 
+                      <line x1={0} y1={0} x2={country.labelOffsetX * 0.72} y2={country.labelOffset * 0.72} stroke="rgba(255,255,255,.65)" strokeWidth={0.8} />
+
                       <text
-                        textAnchor="middle"
+                        textAnchor={country.labelAnchor}
                         y={country.labelOffset}
                         x={country.labelOffsetX}
                         className="fill-white text-[10px] font-semibold md:text-[11px]"

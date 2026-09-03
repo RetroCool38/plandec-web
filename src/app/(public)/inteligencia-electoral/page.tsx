@@ -73,8 +73,8 @@ export default function ElectoralIntelligencePage() {
   }).slice(0, 5);
 
   return (
-    <div className="min-h-[calc(100vh-5rem)] bg-[#F5F1F8] text-[#261B33]">
-      <div className="border-b border-[#DDCFE6] bg-white px-5 py-7 lg:px-10">
+    <div className="min-h-[calc(100vh-5rem)] bg-[#E9DDF0] text-[#261B33]">
+      <div className="border-b border-[#CDAFDC] bg-gradient-to-r from-[#F8F2FB] via-[#EAD8F3] to-[#DCC1EA] px-5 py-7 lg:px-10">
         <div className="mx-auto flex max-w-[1500px] flex-wrap items-end justify-between gap-4">
           <div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#7B3FB6]">Inteligencia electoral</p><h1 className="mt-2 font-serif text-3xl font-bold lg:text-4xl">Mapa electoral del Atlántico</h1><p className="mt-2 text-sm text-[#6A6071]">Compara resultados por puesto de las elecciones territoriales de 2019 y 2023 y del Congreso de 2026.</p></div>
           <div className="flex gap-3"><div className="border-l-2 border-[#7B3FB6] bg-[#F6F0FA] px-4 py-2"><strong className="block text-xl">{activeElection?.places || "—"}</strong><span className="text-xs text-[#6A6071]">puestos con resultados</span></div><div className="border-l-2 border-[#C99A34] bg-[#FCF8EF] px-4 py-2"><strong className="block text-xl">23</strong><span className="text-xs text-[#6A6071]">municipios</span></div></div>
@@ -82,7 +82,7 @@ export default function ElectoralIntelligencePage() {
       </div>
 
       <div className="mx-auto grid max-w-[1500px] lg:grid-cols-[340px_minmax(0,1fr)]">
-        <aside className="flex max-h-[760px] flex-col border-r border-[#DDCFE6] bg-white p-5 lg:min-h-[760px]">
+        <aside className="flex max-h-[760px] flex-col border-r border-[#C9ADD8] bg-[#FBF8FC] p-5 lg:min-h-[760px]">
           <div className="mb-5 grid grid-cols-2 gap-3 rounded-xl bg-[#F6F0FA] p-3">
             <div><label className="mb-2 block text-xs font-bold" htmlFor="anio">Año</label><select id="anio" value={selectedYear} onChange={(event) => { const year = Number(event.target.value); const first = elections.find((election) => election.year === year); if (first) setSelectedElection(first.id); }} className="h-10 w-full rounded-lg border border-[#D9CEE1] bg-white px-2 text-sm font-semibold outline-none focus:border-[#7B3FB6]">{years.map((year) => <option key={year}>{year}</option>)}</select></div>
             <div><label className="mb-2 block text-xs font-bold" htmlFor="corporacion">Elección</label><select id="corporacion" value={selectedElection} onChange={(event) => setSelectedElection(event.target.value)} className="h-10 w-full rounded-lg border border-[#D9CEE1] bg-white px-2 text-sm font-semibold outline-none focus:border-[#7B3FB6]">{electionTypes.map((election) => <option key={election.id} value={election.id}>{election.title}</option>)}</select></div>
@@ -100,10 +100,10 @@ export default function ElectoralIntelligencePage() {
           })}</div>
         </aside>
 
-        <section className="relative min-h-[680px] overflow-hidden bg-[radial-gradient(circle_at_center,#ffffff_0,#ECE5F1_72%)]">
+        <section className="relative min-h-[680px] overflow-hidden bg-[radial-gradient(circle_at_55%_42%,#F8F1FB_0%,#DDC8E8_58%,#C9AAD9_100%)]">
           {error ? <div className="grid h-full place-items-center text-sm text-red-700">{error}</div> : !places.length ? <div className="grid h-full place-items-center text-sm text-[#6A6071]">Preparando mapa…</div> : (
             <svg viewBox={`-35 -35 ${W + 70} ${H + 70}`} className="mx-auto h-[700px] w-full max-w-[720px] p-5" role="img" aria-label="Mapa interactivo de puestos de votación del Atlántico">
-              <g>{municipalities.map((feature) => <path key={feature.properties.MpCodigo} d={polygonPath(feature)} className={`stroke-[#967EA5] [stroke-width:1.4] ${municipality !== "TODOS" && normalize(feature.properties.MpNombre) === normalize(municipality) ? "fill-[#D8C1E7]" : "fill-white"}`} />)}</g>
+              <g>{municipalities.map((feature) => <path key={feature.properties.MpCodigo} d={polygonPath(feature)} className={`stroke-[#74458E] [stroke-width:1.55] ${municipality !== "TODOS" && normalize(feature.properties.MpNombre) === normalize(municipality) ? "fill-[#B985CE]" : "fill-[#F1E5F6]"}`} />)}</g>
               <g>{filtered.map((place) => { const [cx, cy] = project(place.geometry.coordinates); return <circle key={`${place.properties.codigo_municipio_electoral}-${place.properties.codigo_zona}-${place.properties.codigo_puesto}`} cx={cx} cy={cy} r={selected === place ? 10 : 5.2} onClick={() => setSelected(place)} className={`cursor-pointer stroke-white [stroke-width:2] ${selected === place ? "fill-[#C99A34]" : "fill-[#5A2D82] hover:fill-[#C99A34]"}`}><title>{place.properties.puesto}</title></circle>; })}</g>
             </svg>
           )}

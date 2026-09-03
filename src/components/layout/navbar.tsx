@@ -61,7 +61,7 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-[#E8E0EC] bg-white/95 shadow-sm backdrop-blur-md">
       <Container className="flex h-20 items-center justify-between">
-        <Link href="/" className="flex items-center">
+        <Link href="/" className="flex items-center rounded-xl bg-[#5A2D82] px-3 py-2 shadow-sm">
           <img
             src="/logo333.png"
             alt="PLANdeC"

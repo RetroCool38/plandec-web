@@ -64,7 +64,7 @@ export const countriesMock = [
   {
     slug: "panama",
     name: "Panamá",
-    flag: "🇵🇦",
+    flag: "PA",
     system: "República presidencialista",
     president: "José Raúl Mulino",
     parties: [

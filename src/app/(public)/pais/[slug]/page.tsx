@@ -48,45 +48,46 @@ export default async function CountryPage({ params }: CountryPageProps) {
 
   return (
     <Container className="py-16">
-      <div className="flex items-center gap-4">
-        <span className="text-4xl">{country.flag}</span>
+      <div className="flex items-center gap-4 rounded-2xl border border-[#D9C7E8] bg-white/75 p-6 shadow-lg shadow-[#5A2D82]/5">
+        <span className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[#5A2D82] to-[#8B55B2] text-lg font-bold tracking-[.08em] text-white shadow-md" aria-hidden="true">{country.flag}</span>
         <div>
-          <h1 className="text-3xl font-bold">{country.name}</h1>
-          <p className="text-white/60">{country.system}</p>
+          <p className="text-xs font-bold uppercase tracking-[.18em] text-[#7B3FB6]">Perfil político</p>
+          <h1 className="mt-1 text-3xl font-bold text-[#251B38]">{country.name}</h1>
+          <p className="mt-1 text-[#625A69]">{country.system}</p>
         </div>
       </div>
 
       <div className="mt-10 grid gap-6 md:grid-cols-3">
-        <div className="rounded-xl border border-white/10 p-6">
-          <h3 className="text-sm text-white/60">Información política</h3>
+        <div className="rounded-2xl border border-[#D9C7E8] bg-white/85 p-6 shadow-lg shadow-[#5A2D82]/5">
+          <h3 className="text-sm font-bold uppercase tracking-[.14em] text-[#6F3898]">Información política</h3>
 
           <div className="mt-5 space-y-5">
             {politicalInfo.map((item) => (
               <div key={item.label}>
-                <p className="text-sm uppercase tracking-[0.18em] text-white/40">
+                <p className="text-xs uppercase tracking-[0.16em] text-[#867A8C]">
                   {item.label}
                 </p>
-                <p className="mt-2 text-lg font-semibold">{item.value}</p>
+                <p className="mt-2 text-lg font-semibold text-[#2A2140]">{item.value}</p>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="rounded-xl border border-white/10 p-6 md:col-span-2">
-          <h3 className="text-sm text-white/60">Partidos políticos</h3>
+        <div className="rounded-2xl border border-[#D9C7E8] bg-white/85 p-6 shadow-lg shadow-[#5A2D82]/5 md:col-span-2">
+          <h3 className="text-sm font-bold uppercase tracking-[.14em] text-[#6F3898]">Partidos políticos</h3>
 
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             {country.parties.map((party) => (
               <div
                 key={party.name}
-                className="rounded-xl border border-white/10 p-5 transition hover:scale-[1.02]"
+                className="rounded-xl border border-[#E4D8EB] bg-[#FBF9FC] p-5 transition hover:-translate-y-0.5 hover:border-[#B895CE] hover:shadow-md"
               >
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <h4 className="font-semibold">{party.name}</h4>
+                    <h4 className="font-semibold text-[#30263A]">{party.name}</h4>
 
                     {"seats" in party && party.seats && (
-                      <p className="mt-1 text-xs text-white/50">
+                      <p className="mt-1 text-xs text-[#756A7B]">
                         {party.seats} escaños
                       </p>
                     )}
@@ -100,7 +101,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
                   </span>
                 </div>
 
-                <div className="mt-3 h-2 w-full rounded-full bg-white/10">
+                <div className="mt-3 h-2 w-full rounded-full bg-[#EDE5F1]">
                   <div
                     className="h-2 rounded-full"
                     style={{

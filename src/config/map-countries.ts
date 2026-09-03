@@ -7,6 +7,7 @@ export type MapCountry = {
   coordinates: [number, number];
   labelOffset: number;
   labelOffsetX: number;
+  labelAnchor: "start" | "middle" | "end";
   description: string;
 };
 
@@ -18,8 +19,9 @@ export const activeMapCountries: MapCountry[] = [
     href: "/pais/colombia",
     color: "#F4C542",
     coordinates: [-74.3, 4.5],
-    labelOffset: 20,
-    labelOffsetX: 7,
+    labelOffset: 27,
+    labelOffsetX: 14,
+    labelAnchor: "start",
     description: "Inteligencia electoral y análisis territorial",
   },
   {
@@ -29,8 +31,9 @@ export const activeMapCountries: MapCountry[] = [
     href: "/pais/panama",
     color: "#E53935",
     coordinates: [-80.1, 8.6],
-    labelOffset: 17,
-    labelOffsetX: -7,
+    labelOffset: -13,
+    labelOffsetX: -14,
+    labelAnchor: "end",
     description: "Gobernabilidad, economía y comunicación pública",
   },
   {
@@ -42,6 +45,7 @@ export const activeMapCountries: MapCountry[] = [
     coordinates: [5.4, 52.2],
     labelOffset: 17,
     labelOffsetX: 0,
+    labelAnchor: "middle",
     description: "Política europea y dinámica parlamentaria",
   },
 ];
