@@ -9,11 +9,11 @@ export default function SolucionesPage() {
           Soluciones
         </p>
 
-        <h1 className="mt-4 text-4xl font-bold text-white">
+        <h1 className="mt-4 text-4xl font-bold text-[#2A2140]">
           Soluciones estratégicas para campañas y posicionamiento político
         </h1>
 
-        <p className="mt-6 text-lg leading-8 text-white/70">
+        <p className="mt-6 text-lg leading-8 text-[#5F5868]">
           Diseñamos, analizamos y ejecutamos estrategias basadas en datos,
           territorio y comunicación efectiva para campañas, organizaciones e
           instituciones.
@@ -33,11 +33,11 @@ export default function SolucionesPage() {
         ].map((service) => (
           <div
             key={service}
-            className="rounded-2xl border border-white/10 bg-[#0B1020] p-6 transition hover:border-[#5A2D82]"
+            className="rounded-2xl border border-[#D9C7E8] bg-white/80 p-6 shadow-lg shadow-[#5A2D82]/8 backdrop-blur-sm transition hover:-translate-y-1 hover:border-[#A970FF] hover:shadow-xl"
           >
-            <h3 className="text-xl font-semibold text-white">{service}</h3>
+            <h3 className="text-xl font-semibold text-[#2A2140]">{service}</h3>
 
-            <p className="mt-4 text-sm text-white/60">
+            <p className="mt-4 text-sm leading-7 text-[#5F5868]">
               Solución estratégica enfocada en resultados, posicionamiento y
               toma de decisiones políticas.
             </p>
@@ -47,18 +47,19 @@ export default function SolucionesPage() {
 
       {/* PROCESO */}
       <section className="mt-20">
-        <h2 className="text-3xl font-bold text-white">Cómo trabajamos</h2>
+        <h2 className="text-3xl font-bold text-[#2A2140]">Cómo trabajamos</h2>
 
         <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {["Análisis", "Estrategia", "Ejecución", "Optimización"].map(
-            (step) => (
+            (step, index) => (
               <div
                 key={step}
-                className="rounded-2xl border border-white/10 bg-[#0B1020] p-6"
+                className="rounded-2xl border border-[#D9C7E8] bg-white/80 p-6 shadow-lg shadow-[#5A2D82]/8"
               >
-                <h3 className="text-lg font-semibold text-white">{step}</h3>
+                <span className="text-sm font-bold text-[#A970FF]">0{index + 1}</span>
+                <h3 className="mt-3 text-lg font-semibold text-[#2A2140]">{step}</h3>
 
-                <p className="mt-3 text-sm text-white/60">
+                <p className="mt-3 text-sm leading-7 text-[#5F5868]">
                   Proceso estructurado para lograr resultados reales.
                 </p>
               </div>
@@ -70,11 +71,11 @@ export default function SolucionesPage() {
       {/* CTA + FORMULARIO */}
       <section className="mt-20">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold text-white">
+          <h2 className="text-3xl font-bold text-[#2A2140]">
             ¿Quieres llevar tu proyecto político al siguiente nivel?
           </h2>
 
-          <p className="mt-4 text-white/70">
+          <p className="mt-4 text-[#5F5868]">
             Déjanos tus datos y te contactaremos directamente para evaluar tu
             caso.
           </p>
@@ -84,14 +85,14 @@ export default function SolucionesPage() {
           <form
             action="https://formspree.io/f/YOUR_ID"
             method="POST"
-            className="space-y-6"
+            className="space-y-6 rounded-2xl border border-[#D9C7E8] bg-white/80 p-6 shadow-xl shadow-[#5A2D82]/10 backdrop-blur-sm sm:p-8"
           >
             <input
               type="text"
               name="nombre"
               placeholder="Nombre completo"
               required
-              className="w-full rounded-xl border border-white/10 bg-[#0B1020] px-4 py-3 text-white placeholder:text-white/40"
+              className="w-full rounded-xl border border-[#D9C7E8] bg-white px-4 py-3 text-[#2A2140] outline-none placeholder:text-[#8A8191] focus:border-[#7B3FB6] focus:ring-2 focus:ring-[#7B3FB6]/15"
             />
 
             <input
@@ -99,7 +100,7 @@ export default function SolucionesPage() {
               name="telefono"
               placeholder="Número de teléfono"
               required
-              className="w-full rounded-xl border border-white/10 bg-[#0B1020] px-4 py-3 text-white placeholder:text-white/40"
+              className="w-full rounded-xl border border-[#D9C7E8] bg-white px-4 py-3 text-[#2A2140] outline-none placeholder:text-[#8A8191] focus:border-[#7B3FB6] focus:ring-2 focus:ring-[#7B3FB6]/15"
             />
 
             <input
@@ -107,7 +108,7 @@ export default function SolucionesPage() {
               name="email"
               placeholder="Correo electrónico"
               required
-              className="w-full rounded-xl border border-white/10 bg-[#0B1020] px-4 py-3 text-white placeholder:text-white/40"
+              className="w-full rounded-xl border border-[#D9C7E8] bg-white px-4 py-3 text-[#2A2140] outline-none placeholder:text-[#8A8191] focus:border-[#7B3FB6] focus:ring-2 focus:ring-[#7B3FB6]/15"
             />
 
             <textarea
@@ -115,7 +116,7 @@ export default function SolucionesPage() {
               placeholder="¿Qué necesitas? Cuéntanos tu caso..."
               rows={4}
               required
-              className="w-full rounded-xl border border-white/10 bg-[#0B1020] px-4 py-3 text-white placeholder:text-white/40"
+              className="w-full rounded-xl border border-[#D9C7E8] bg-white px-4 py-3 text-[#2A2140] outline-none placeholder:text-[#8A8191] focus:border-[#7B3FB6] focus:ring-2 focus:ring-[#7B3FB6]/15"
             />
 
             <button
@@ -130,7 +131,7 @@ export default function SolucionesPage() {
             href="https://wa.me/3160450461?text=Hola,%20quiero%20información%20sobre%20asesoría%20política"
             target="_blank"
             rel="noreferrer"
-            className="mt-6 block rounded-full border border-white/20 py-3 text-center text-white transition hover:bg-white/10"
+            className="mt-6 block rounded-full border border-[#5A2D82] bg-white/60 py-3 text-center font-semibold text-[#5A2D82] transition hover:bg-[#F1E7F7]"
           >
             Asesoría inmediata por WhatsApp
           </a>

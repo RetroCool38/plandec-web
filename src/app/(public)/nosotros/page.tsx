@@ -81,7 +81,7 @@ export default function NosotrosPage() {
           ].map((pillar) => (
             <div
               key={pillar.title}
-              className="rounded-2xl border border-white/10 bg-[#0B1020] p-6"
+              className="rounded-2xl border border-[#D9C7E8] bg-white/80 p-6 shadow-lg shadow-[#5A2D82]/8 backdrop-blur-sm transition hover:-translate-y-1 hover:border-[#A970FF]"
             >
               <h3 className="text-xl font-semibold text-[#2A2140]">
                 {pillar.title}
@@ -109,7 +109,7 @@ export default function NosotrosPage() {
             <Link
               key={member.slug}
               href={`/nosotros/equipo/${member.slug}`}
-              className="rounded-2xl border border-white/10 bg-[#0B1020] p-8 transition hover:scale-[1.01] hover:border-white/20"
+              className="rounded-2xl border border-[#D9C7E8] bg-white/80 p-8 shadow-lg shadow-[#5A2D82]/8 backdrop-blur-sm transition hover:-translate-y-1 hover:border-[#A970FF] hover:shadow-xl"
             >
               <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
                 <img
