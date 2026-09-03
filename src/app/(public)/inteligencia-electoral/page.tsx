@@ -1,0 +1,95 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+
+type Position = [number, number];
+type Municipality = { geometry: { coordinates: Position[][] }; properties: { MpCodigo: string; MpNombre: string } };
+type Place = { geometry: { coordinates: Position }; properties: { municipio: string; puesto: string; direccion: string; codigo_municipio_electoral: string; codigo_zona: string; codigo_puesto: string } };
+type Result = { candidato: string; partido: string; codigo: string; votos: number };
+
+const W = 900, H = 930;
+const bounds = { minLon: -75.273, maxLon: -74.686, minLat: 10.24, maxLat: 11.11 };
+const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+const project = ([lon, lat]: Position): Position => [
+  ((lon - bounds.minLon) / (bounds.maxLon - bounds.minLon)) * W,
+  H - ((lat - bounds.minLat) / (bounds.maxLat - bounds.minLat)) * H,
+];
+const polygonPath = (feature: Municipality) => feature.geometry.coordinates
+  .map((ring) => ring.map((point, index) => `${index ? "L" : "M"}${project(point).join(",")}`).join(" ") + " Z")
+  .join(" ");
+
+export default function ElectoralIntelligencePage() {
+  const [municipalities, setMunicipalities] = useState<Municipality[]>([]);
+  const [places, setPlaces] = useState<Place[]>([]);
+  const [results, setResults] = useState<Record<string, Result[]>>({});
+  const [municipality, setMunicipality] = useState("TODOS");
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState<Place | null>(null);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    Promise.all([
+      fetch("/data/municipios_atlantico.geojson").then((response) => response.json()),
+      fetch("/data/puestos_votacion_atlantico_2023.geojson").then((response) => response.json()),
+      fetch("/data/resultados_gobernacion_2023.json").then((response) => response.json()),
+    ]).then(([municipalityData, placeData, resultData]) => {
+      setMunicipalities(municipalityData.features);
+      setPlaces(placeData.features);
+      setResults(resultData);
+    }).catch(() => setError("No fue posible cargar la información electoral."));
+  }, []);
+
+  const names = useMemo(() => [...new Set(places.map((place) => place.properties.municipio))].sort(), [places]);
+  const filtered = useMemo(() => places.filter((place) => {
+    const inMunicipality = municipality === "TODOS" || place.properties.municipio === municipality;
+    const needle = normalize(query.trim());
+    return inMunicipality && (!needle || normalize(`${place.properties.puesto} ${place.properties.direccion}`).includes(needle));
+  }), [places, municipality, query]);
+  const resultKey = selected ? `${selected.properties.codigo_municipio_electoral}-${selected.properties.codigo_zona}-${selected.properties.codigo_puesto}` : "";
+  const candidates = (results[resultKey] || []).filter((result) => !["00996", "00998"].includes(result.codigo)).slice(0, 5);
+
+  return (
+    <div className="min-h-[calc(100vh-5rem)] bg-[#F5F1F8] text-[#261B33]">
+      <div className="border-b border-[#DDCFE6] bg-white px-5 py-7 lg:px-10">
+        <div className="mx-auto flex max-w-[1500px] flex-wrap items-end justify-between gap-4">
+          <div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#7B3FB6]">Inteligencia electoral</p><h1 className="mt-2 font-serif text-3xl font-bold lg:text-4xl">Mapa electoral del Atlántico</h1><p className="mt-2 text-sm text-[#6A6071]">Explora puestos de votación y resultados agregados de Gobernación 2023.</p></div>
+          <div className="flex gap-3"><div className="border-l-2 border-[#7B3FB6] bg-[#F6F0FA] px-4 py-2"><strong className="block text-xl">{places.length || "—"}</strong><span className="text-xs text-[#6A6071]">puestos</span></div><div className="border-l-2 border-[#C99A34] bg-[#FCF8EF] px-4 py-2"><strong className="block text-xl">23</strong><span className="text-xs text-[#6A6071]">municipios</span></div></div>
+        </div>
+      </div>
+
+      <div className="mx-auto grid max-w-[1500px] lg:grid-cols-[340px_minmax(0,1fr)]">
+        <aside className="flex max-h-[760px] flex-col border-r border-[#DDCFE6] bg-white p-5 lg:min-h-[760px]">
+          <label className="mb-2 text-xs font-bold" htmlFor="municipio">Municipio</label>
+          <select id="municipio" value={municipality} onChange={(event) => { setMunicipality(event.target.value); setSelected(null); }} className="mb-4 h-11 rounded-lg border border-[#D9CEE1] bg-white px-3 text-sm outline-none focus:border-[#7B3FB6]">
+            <option value="TODOS">Todos los municipios</option>{names.map((name) => <option key={name}>{name}</option>)}
+          </select>
+          <label className="mb-2 text-xs font-bold" htmlFor="buscar">Buscar puesto o dirección</label>
+          <input id="buscar" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Ej. Colegio Nazareth" className="mb-4 h-11 rounded-lg border border-[#D9CEE1] px-3 text-sm outline-none focus:border-[#7B3FB6]" />
+          <div className="mb-2 flex justify-between border-b border-[#E9E2ED] pb-2 text-xs"><strong>Resultados</strong><span className="text-[#756A7B]">{filtered.length} puestos</span></div>
+          <div className="overflow-y-auto">{filtered.slice(0, 100).map((place) => {
+            const code = `${place.properties.codigo_zona}-${place.properties.codigo_puesto}`;
+            return <button key={`${place.properties.municipio}-${code}`} onClick={() => setSelected(place)} className={`block w-full border-b border-[#F0EBF3] px-2 py-3 text-left transition hover:bg-[#F7F1FA] ${selected === place ? "bg-[#F1E7F7]" : ""}`}><strong className="block text-xs leading-5">{place.properties.puesto}</strong><span className="mt-1 block text-[11px] text-[#746A7A]">{place.properties.municipio} · Zona {code}</span></button>;
+          })}</div>
+        </aside>
+
+        <section className="relative min-h-[680px] overflow-hidden bg-[radial-gradient(circle_at_center,#ffffff_0,#ECE5F1_72%)]">
+          {error ? <div className="grid h-full place-items-center text-sm text-red-700">{error}</div> : !places.length ? <div className="grid h-full place-items-center text-sm text-[#6A6071]">Preparando mapa…</div> : (
+            <svg viewBox={`-35 -35 ${W + 70} ${H + 70}`} className="mx-auto h-[700px] w-full max-w-[720px] p-5" role="img" aria-label="Mapa interactivo de puestos de votación del Atlántico">
+              <g>{municipalities.map((feature) => <path key={feature.properties.MpCodigo} d={polygonPath(feature)} className={`stroke-[#967EA5] [stroke-width:1.4] ${municipality !== "TODOS" && normalize(feature.properties.MpNombre) === normalize(municipality) ? "fill-[#D8C1E7]" : "fill-white"}`} />)}</g>
+              <g>{filtered.map((place) => { const [cx, cy] = project(place.geometry.coordinates); return <circle key={`${place.properties.codigo_municipio_electoral}-${place.properties.codigo_zona}-${place.properties.codigo_puesto}`} cx={cx} cy={cy} r={selected === place ? 10 : 5.2} onClick={() => setSelected(place)} className={`cursor-pointer stroke-white [stroke-width:2] ${selected === place ? "fill-[#C99A34]" : "fill-[#5A2D82] hover:fill-[#C99A34]"}`}><title>{place.properties.puesto}</title></circle>; })}</g>
+            </svg>
+          )}
+
+          {selected && <aside className="absolute right-4 top-4 max-h-[650px] w-[min(370px,calc(100%-2rem))] overflow-y-auto border-t-4 border-[#5A2D82] bg-white p-6 shadow-2xl">
+            <button onClick={() => setSelected(null)} className="absolute right-4 top-3 h-8 w-8 rounded-full bg-[#F1ECF4] text-sm" aria-label="Cerrar">×</button>
+            <p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#7B3FB6]">Puesto de votación</p><h2 className="mr-8 mt-2 font-serif text-2xl font-bold leading-tight">{selected.properties.puesto}</h2><p className="mt-3 border-b border-[#E8E0EC] pb-4 text-sm text-[#6A6071]">{selected.properties.direccion}</p>
+            <dl className="my-3 text-xs"><div className="flex justify-between border-b border-[#EEE8F1] py-2"><dt>Municipio</dt><dd className="font-bold">{selected.properties.municipio}</dd></div><div className="flex justify-between border-b border-[#EEE8F1] py-2"><dt>Zona / puesto</dt><dd className="font-bold">{selected.properties.codigo_zona} / {selected.properties.codigo_puesto}</dd></div></dl>
+            <div className="mt-5 flex items-end justify-between"><h3 className="font-serif font-bold">Gobernación 2023</h3><span className="text-[10px] text-[#756A7B]">votos por puesto</span></div>
+            <div className="mt-2">{candidates.map((candidate, index) => <div key={candidate.codigo} className="grid grid-cols-[24px_1fr_auto] items-center gap-2 border-b border-[#EEE8F1] py-2"><span className="grid h-6 w-6 place-items-center rounded-full bg-[#F1E7F7] text-[10px] font-bold text-[#5A2D82]">{index + 1}</span><span><strong className="block text-[11px] leading-tight">{candidate.candidato}</strong><small className="mt-1 block text-[9px] text-[#756A7B]">{candidate.partido}</small></span><b className="text-sm">{candidate.votos.toLocaleString("es-CO")}</b></div>)}</div>
+            <p className="mt-4 text-center text-[10px] text-[#756A7B]">Resultados agregados de todas las mesas del puesto.</p>
+          </aside>}
+        </section>
+      </div>
+    </div>
+  );
+}

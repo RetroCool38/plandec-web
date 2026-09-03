@@ -19,6 +19,7 @@ const navLinks: NavItem[] = [
   { label: "Inicio", href: "/" },
   { label: "Nosotros", href: "/nosotros" },
   { label: "Soluciones", href: "/soluciones" },
+  { label: "Inteligencia electoral", href: "/inteligencia-electoral" },
   {
     label: "Noticias",
     href: "/noticias",

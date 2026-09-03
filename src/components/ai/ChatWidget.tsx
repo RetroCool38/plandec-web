@@ -5,7 +5,7 @@ import { useState } from "react";
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const [reply, setReply] = useState("Hola, soy el asistente IA de PLANdeC. Puedes preguntarme sobre el documento cargado.");
+  const [reply, setReply] = useState("Hola, soy el asistente de PLANdeC. Pregúntame sobre nuestros servicios, estrategia política o inteligencia electoral.");
   const [loading, setLoading] = useState(false);
 
   async function sendMessage() {
@@ -38,8 +38,9 @@ export default function ChatWidget() {
       <button
         onClick={() => setOpen(!open)}
         className="fixed bottom-6 right-6 z-[9999] rounded-full bg-[#5A2D82] px-6 py-3 text-white font-semibold shadow-2xl hover:bg-[#6f38a0] transition"
+      aria-label={open ? "Cerrar asistente de PLANdeC" : "Abrir asistente de PLANdeC"}
       >
-        💬 IA PLANdeC
+        IA PLANdeC
       </button>
 
       {open && (
@@ -61,7 +62,7 @@ export default function ChatWidget() {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") sendMessage();
+                  if (e.key === "Enter" && !loading) sendMessage();
                 }}
                 placeholder="Escribe tu pregunta..."
                 className="flex-1 rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-white/40 outline-none"
@@ -69,6 +70,7 @@ export default function ChatWidget() {
 
               <button
                 onClick={sendMessage}
+                disabled={loading}
                 className="rounded-xl bg-[#5A2D82] px-4 py-2 text-sm font-semibold text-white hover:bg-[#6f38a0]"
               >
                 Enviar
