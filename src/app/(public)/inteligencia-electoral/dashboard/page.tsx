@@ -43,9 +43,33 @@ const partyStyle = (name: string) => {
   return { badge: name.split(/\s+/).filter(Boolean).slice(0, 2).map((word) => word[0]).join(""), color };
 };
 
+const partyLogo = (name: string) => {
+  const value = normalize(name);
+  const logos = [
+    ["NUEVO LIBERALISMO", 4, 3], ["PARTIDO DE LA UNION", 5, 2], ["CAMBIO RADICAL", 5, 1],
+    ["LIBERAL", 2, 3], ["CONSERVADOR", 4, 2], ["CENTRO DEMOCRATICO", 6, 1],
+    ["ALIANZA VERDE", 4, 1], ["VERDE OXIGENO", 5, 4], ["POLO", 6, 3],
+    ["ASI", 3, 1], ["MIRA", 3, 4], ["DIGNIDAD", 0, 4], ["EN MARCHA", 0, 0],
+    ["INDEPENDIENTES", 1, 0], ["SALVACION NACIONAL", 2, 0], ["PARTIDO ADA", 3, 0],
+    ["MAIS", 4, 0], ["AICO", 5, 0], ["ESPERANZA DEMOCRATICA", 6, 0],
+    ["FUERZA CIUDADANA", 0, 1], ["COLOMBIA HUMANA", 1, 1], ["FUERZA DE TODOS", 2, 1],
+    ["COLOMBIA JUSTA LIBRES", 0, 2], ["COLOMBIA RENACIENTE", 1, 2], ["COMUNES", 2, 2],
+    ["PARTIDO COMUNISTA", 3, 2], ["ANTICORRUPCION", 3, 3], ["PARTIDO DEMOCRATA", 0, 3],
+    ["LA FUERZA DE LA PAZ", 2, 4], ["GENTE EN MOVIMIENTO", 1, 4],
+    ["TODOS SOMOS COLOMBIA", 6, 4], ["PARTIDO DEL TRABAJO", 6, 2],
+    ["UNION PATRIOTICA", 4, 4], ["CREEMOS", 5, 3],
+  ] as const;
+  const found = logos.find(([needle]) => value.includes(needle));
+  if (found) return { image: "/partidos-colombia.png", position: `${(found[1] / 6) * 100}% ${(found[2] / 4) * 100}%`, size: "700% 500%" };
+  if (value.includes("PACTO HISTORICO")) return { image: "/partidos-colombia-2.png", position: "0% 100%", size: "600% 500%" };
+  if (value.includes("ECOLOGISTA")) return { image: "/partidos-colombia-2.png", position: "40% 75%", size: "600% 500%" };
+  return null;
+};
+
 function PartyBadge({ name }: { name: string }) {
   const style = partyStyle(name);
-  return <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border-2 border-white text-[9px] font-black text-white shadow-md ring-1 ring-black/10" style={{ backgroundColor: style.color }}>{style.badge}</span>;
+  const logo = partyLogo(name);
+  return <span className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full border-2 border-white text-[9px] font-black text-white shadow-md ring-1 ring-black/15" style={logo ? { backgroundImage: `url(${logo.image})`, backgroundPosition: logo.position, backgroundSize: logo.size, backgroundRepeat: "no-repeat" } : { backgroundColor: style.color }}>{logo ? <span className="sr-only">Logo {name}</span> : style.badge}</span>;
 }
 
 export default function ElectoralDashboardPage() {
