@@ -10,9 +10,17 @@
 6. Construir agregados por puesto y mesa para el mapa de fortaleza.
 7. Validar el piloto con datos ficticios antes de cargar información real.
 
-## Expansión nacional
+## Zonas de trabajo confirmadas
+
+1. Atlántico: piloto activo, comenzando por Barranquilla.
+2. Norte de Santander: segunda carga territorial.
+3. Bogotá–Cundinamarca: zona operativa conjunta con Bogotá D.C. y Cundinamarca almacenadas como entidades separadas.
+
+## Expansión territorial
 
 Cada nuevo departamento requiere: límites geográficos, catálogo DIVIPOL, coordenadas de puestos, mesas y resultados por elección. La interfaz ya seguirá el orden Departamento → Municipio → Puesto → Mesa.
+
+La cobertura no quedará limitada a las zonas iniciales. Cada campaña podrá activar nuevos departamentos y municipios sin modificar el modelo general, manteniendo separados sus usuarios, líderes, contactos, permisos e indicadores.
 
 ## Criterios de análisis
 
