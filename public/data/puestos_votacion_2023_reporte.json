@@ -1,0 +1,17 @@
+{
+  "BOGOTA D C": {
+    "official_places": 962,
+    "exact": 962,
+    "output": "puestos_votacion_bogota_2023.geojson"
+  },
+  "CUNDINAMARCA": {
+    "official_places": 602,
+    "exact": 602,
+    "output": "puestos_votacion_cundinamarca_2023.geojson"
+  },
+  "NORTE DE SAN": {
+    "official_places": 454,
+    "exact": 454,
+    "output": "puestos_votacion_norte_de_santander_2023.geojson"
+  }
+}
