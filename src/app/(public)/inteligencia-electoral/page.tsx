@@ -12,13 +12,13 @@ type Municipality = { geometry: Geometry | null; properties: Record<string, stri
 type Place = { geometry: { coordinates: Position }; properties: { municipio: string; puesto: string; direccion: string; codigo_municipio_electoral: string; codigo_zona: string; codigo_puesto: string; mesas?: number; comuna?: string } };
 type Result = { candidato: string; partido: string; codigo: string; votos: number };
 type Election = { id: string; year: number; corporation: string; title: string; label: string; file: string; places: number };
-type Department = { id: string; name: string; title: string; map: string; places: string; municipalities: number; resultsAvailable: boolean };
+type Department = { id: string; name: string; title: string; map: string; places: string; elections?: string; municipalities: number; resultsAvailable: boolean };
 
 const W = 900;
 const H = 760;
 const departments: Department[] = [
-  { id: "atlantico", name: "Atlántico", title: "del Atlántico", map: "/data/municipios_atlantico.geojson", places: "/data/puestos_votacion_atlantico_2023.geojson", municipalities: 23, resultsAvailable: true },
-  { id: "norte-de-santander", name: "Norte de Santander", title: "de Norte de Santander", map: "/data/municipios_norte_de_santander.geojson?v=20261018", places: "/data/puestos_votacion_norte_de_santander_2023.geojson?v=20261018", municipalities: 40, resultsAvailable: false },
+  { id: "atlantico", name: "Atlántico", title: "del Atlántico", map: "/data/municipios_atlantico.geojson", places: "/data/puestos_votacion_atlantico_2023.geojson", elections: "/data/elecciones_atlantico.json", municipalities: 23, resultsAvailable: true },
+  { id: "norte-de-santander", name: "Norte de Santander", title: "de Norte de Santander", map: "/data/municipios_norte_de_santander.geojson?v=20261018", places: "/data/puestos_votacion_norte_de_santander_2023.geojson?v=20261018", elections: "/data/elecciones_norte_de_santander.json?v=20261018", municipalities: 40, resultsAvailable: true },
   { id: "bogota-dc", name: "Bogotá D. C.", title: "de Bogotá D. C.", map: "/data/bogota_dc.geojson?v=20261018", places: "/data/puestos_votacion_bogota_2023.geojson?v=20261018", municipalities: 1, resultsAvailable: false },
   { id: "cundinamarca", name: "Cundinamarca", title: "de Cundinamarca", map: "/data/municipios_cundinamarca.geojson?v=20261018", places: "/data/puestos_votacion_cundinamarca_2023.geojson?v=20261018", municipalities: 116, resultsAvailable: false },
 ];
@@ -69,8 +69,8 @@ export default function ElectoralIntelligencePage() {
     setMunicipality(department.resultsAvailable ? "BARRANQUILLA" : "TODOS");
 
     const requests: Promise<Response>[] = [fetch(department.map), fetch(department.places)];
-    if (department.resultsAvailable) {
-      requests.push(fetch("/data/elecciones_atlantico.json"));
+    if (department.resultsAvailable && department.elections) {
+      requests.push(fetch(department.elections));
     }
 
     Promise.all(requests)
@@ -88,7 +88,7 @@ export default function ElectoralIntelligencePage() {
       .finally(() => !cancelled && setMapLoading(false));
 
     return () => { cancelled = true; };
-  }, [department.id, department.map, department.places, department.resultsAvailable]);
+  }, [department.id, department.map, department.places, department.elections, department.resultsAvailable]);
 
   const activeElection = elections.find((election) => election.id === selectedElection);
   const years = useMemo(() => [...new Set(elections.map((election) => election.year))].sort(), [elections]);
@@ -149,7 +149,7 @@ export default function ElectoralIntelligencePage() {
 
   const changeDepartment = (id: string) => {
     setDepartmentId(id);
-    if (id === "atlantico") {
+    if (departments.find((item) => item.id === id)?.resultsAvailable) {
       setPendingYear(2023);
       setPendingElection("2023-001");
       setSelectedElection("2023-001");
