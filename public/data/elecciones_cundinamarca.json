@@ -1,0 +1,132 @@
+[
+  {
+    "id": "2019-001",
+    "year": 2019,
+    "corporation": "001",
+    "title": "Gobernación",
+    "label": "Gobernación 2019",
+    "file": "/data/resultados_cundinamarca_2019_001.json",
+    "places": 474,
+    "size": 388209
+  },
+  {
+    "id": "2019-002",
+    "year": 2019,
+    "corporation": "002",
+    "title": "Asamblea",
+    "label": "Asamblea 2019",
+    "file": "/data/resultados_cundinamarca_2019_002.json",
+    "places": 474,
+    "size": 4582107
+  },
+  {
+    "id": "2019-003",
+    "year": 2019,
+    "corporation": "003",
+    "title": "Alcaldía",
+    "label": "Alcaldía 2019",
+    "file": "/data/resultados_cundinamarca_2019_003.json",
+    "places": 474,
+    "size": 388551
+  },
+  {
+    "id": "2019-004",
+    "year": 2019,
+    "corporation": "004",
+    "title": "Concejo",
+    "label": "Concejo 2019",
+    "file": "/data/resultados_cundinamarca_2019_004.json",
+    "places": 474,
+    "size": 6150622
+  },
+  {
+    "id": "2019-005",
+    "year": 2019,
+    "corporation": "005",
+    "title": "JAL",
+    "label": "JAL 2019",
+    "file": "/data/resultados_cundinamarca_2019_005.json",
+    "places": 93,
+    "size": 452448
+  },
+  {
+    "id": "2023-001",
+    "year": 2023,
+    "corporation": "001",
+    "title": "Gobernación",
+    "label": "Gobernación 2023",
+    "file": "/data/resultados_cundinamarca_2023_001.json",
+    "places": 602,
+    "size": 725582
+  },
+  {
+    "id": "2023-002",
+    "year": 2023,
+    "corporation": "002",
+    "title": "Asamblea",
+    "label": "Asamblea 2023",
+    "file": "/data/resultados_cundinamarca_2023_002.json",
+    "places": 602,
+    "size": 6525188
+  },
+  {
+    "id": "2023-003",
+    "year": 2023,
+    "corporation": "003",
+    "title": "Alcaldía",
+    "label": "Alcaldía 2023",
+    "file": "/data/resultados_cundinamarca_2023_003.json",
+    "places": 602,
+    "size": 674120
+  },
+  {
+    "id": "2023-004",
+    "year": 2023,
+    "corporation": "004",
+    "title": "Concejo",
+    "label": "Concejo 2023",
+    "file": "/data/resultados_cundinamarca_2023_004.json",
+    "places": 602,
+    "size": 9318684
+  },
+  {
+    "id": "2023-005",
+    "year": 2023,
+    "corporation": "005",
+    "title": "JAL",
+    "label": "JAL 2023",
+    "file": "/data/resultados_cundinamarca_2023_005.json",
+    "places": 137,
+    "size": 922883
+  },
+  {
+    "id": "2026-001",
+    "year": 2026,
+    "corporation": "001",
+    "title": "Senado",
+    "label": "Senado 2026",
+    "file": "/data/resultados_cundinamarca_2026_001.json",
+    "places": 684,
+    "size": 10935408
+  },
+  {
+    "id": "2026-002",
+    "year": 2026,
+    "corporation": "002",
+    "title": "Cámara de Representantes",
+    "label": "Cámara de Representantes 2026",
+    "file": "/data/resultados_cundinamarca_2026_002.json",
+    "places": 684,
+    "size": 4986971
+  },
+  {
+    "id": "2026-006",
+    "year": 2026,
+    "corporation": "006",
+    "title": "Consultas",
+    "label": "Consultas 2026",
+    "file": "/data/resultados_cundinamarca_2026_006.json",
+    "places": 684,
+    "size": 1165793
+  }
+]

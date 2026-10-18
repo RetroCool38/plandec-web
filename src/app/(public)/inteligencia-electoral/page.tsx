@@ -19,8 +19,8 @@ const H = 760;
 const departments: Department[] = [
   { id: "atlantico", name: "Atlántico", title: "del Atlántico", map: "/data/municipios_atlantico.geojson", places: "/data/puestos_votacion_atlantico_2023.geojson", elections: "/data/elecciones_atlantico.json", municipalities: 23, resultsAvailable: true },
   { id: "norte-de-santander", name: "Norte de Santander", title: "de Norte de Santander", map: "/data/municipios_norte_de_santander.geojson?v=20261018", places: "/data/puestos_votacion_norte_de_santander_2023.geojson?v=20261018", elections: "/data/elecciones_norte_de_santander.json?v=20261018", municipalities: 40, resultsAvailable: true },
-  { id: "bogota-dc", name: "Bogotá D. C.", title: "de Bogotá D. C.", map: "/data/bogota_dc.geojson?v=20261018", places: "/data/puestos_votacion_bogota_2023.geojson?v=20261018", municipalities: 1, resultsAvailable: false },
-  { id: "cundinamarca", name: "Cundinamarca", title: "de Cundinamarca", map: "/data/municipios_cundinamarca.geojson?v=20261018", places: "/data/puestos_votacion_cundinamarca_2023.geojson?v=20261018", municipalities: 116, resultsAvailable: false },
+  { id: "bogota-dc", name: "Bogotá D. C.", title: "de Bogotá D. C.", map: "/data/bogota_dc.geojson?v=20261018", places: "/data/puestos_votacion_bogota_2023.geojson?v=20261018", elections: "/data/elecciones_bogota.json?v=20261018", municipalities: 1, resultsAvailable: true },
+  { id: "cundinamarca", name: "Cundinamarca", title: "de Cundinamarca", map: "/data/municipios_cundinamarca.geojson?v=20261018", places: "/data/puestos_votacion_cundinamarca_2023.geojson?v=20261018", elections: "/data/elecciones_cundinamarca.json?v=20261018", municipalities: 116, resultsAvailable: true },
 ];
 
 const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
@@ -81,7 +81,15 @@ export default function ElectoralIntelligencePage() {
         setMunicipalities(payloads[0].features.filter((feature: Municipality) => feature.geometry));
         setPlaces(payloads[1].features);
         if (department.resultsAvailable) {
-          setElections(payloads[2]);
+          const loadedElections = payloads[2] as Election[];
+          const preferred = loadedElections.find((election) => election.year === 2023) || loadedElections[0];
+          setElections(loadedElections);
+          if (preferred) {
+            setPendingYear(preferred.year);
+            setPendingElection(preferred.id);
+            setSelectedElection(preferred.id);
+            setResultsLoading(true);
+          }
         }
       })
       .catch(() => !cancelled && setError("No fue posible cargar el mapa seleccionado."))
@@ -149,12 +157,7 @@ export default function ElectoralIntelligencePage() {
 
   const changeDepartment = (id: string) => {
     setDepartmentId(id);
-    if (departments.find((item) => item.id === id)?.resultsAvailable) {
-      setPendingYear(2023);
-      setPendingElection("2023-001");
-      setSelectedElection("2023-001");
-      setResultsLoading(true);
-    }
+    setResultsLoading(true);
   };
 
   return (

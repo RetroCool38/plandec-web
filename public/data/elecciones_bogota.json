@@ -1,0 +1,92 @@
+[
+  {
+    "id": "2019-003",
+    "year": 2019,
+    "corporation": "003",
+    "title": "Alcaldía",
+    "label": "Alcaldía 2019",
+    "file": "/data/resultados_bogota_2019_003.json",
+    "places": 816,
+    "size": 557506
+  },
+  {
+    "id": "2019-004",
+    "year": 2019,
+    "corporation": "004",
+    "title": "Concejo",
+    "label": "Concejo 2019",
+    "file": "/data/resultados_bogota_2019_004.json",
+    "places": 816,
+    "size": 24570971
+  },
+  {
+    "id": "2019-005",
+    "year": 2019,
+    "corporation": "005",
+    "title": "JAL",
+    "label": "JAL 2019",
+    "file": "/data/resultados_bogota_2019_005.json",
+    "places": 811,
+    "size": 9007675
+  },
+  {
+    "id": "2023-003",
+    "year": 2023,
+    "corporation": "003",
+    "title": "Alcaldía",
+    "label": "Alcaldía 2023",
+    "file": "/data/resultados_bogota_2023_003.json",
+    "places": 962,
+    "size": 1263109
+  },
+  {
+    "id": "2023-004",
+    "year": 2023,
+    "corporation": "004",
+    "title": "Concejo",
+    "label": "Concejo 2023",
+    "file": "/data/resultados_bogota_2023_004.json",
+    "places": 962,
+    "size": 27369366
+  },
+  {
+    "id": "2023-005",
+    "year": 2023,
+    "corporation": "005",
+    "title": "JAL",
+    "label": "JAL 2023",
+    "file": "/data/resultados_bogota_2023_005.json",
+    "places": 957,
+    "size": 10254727
+  },
+  {
+    "id": "2026-001",
+    "year": 2026,
+    "corporation": "001",
+    "title": "Senado",
+    "label": "Senado 2026",
+    "file": "/data/resultados_bogota_2026_001.json",
+    "places": 1083,
+    "size": 25167466
+  },
+  {
+    "id": "2026-002",
+    "year": 2026,
+    "corporation": "002",
+    "title": "Cámara de Representantes",
+    "label": "Cámara de Representantes 2026",
+    "file": "/data/resultados_bogota_2026_002.json",
+    "places": 1082,
+    "size": 19367388
+  },
+  {
+    "id": "2026-006",
+    "year": 2026,
+    "corporation": "006",
+    "title": "Consultas",
+    "label": "Consultas 2026",
+    "file": "/data/resultados_bogota_2026_006.json",
+    "places": 1083,
+    "size": 2125343
+  }
+]
