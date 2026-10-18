@@ -1,8 +1,31 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { newsMock } from "@/services/mock/news";
 import NewsCard from "@/components/news/news-card";
+import { getPublishedNews } from "@/services/news/news-client";
+import type { NewsArticle } from "@/types/news-article";
 
 export default function NewsSection() {
+  const [articles, setArticles] = useState<NewsArticle[]>(newsMock);
+
+  useEffect(() => {
+    let active = true;
+
+    getPublishedNews()
+      .then((news) => {
+        if (active && news?.length) setArticles(news.slice(0, 3));
+      })
+      .catch(() => {
+        // Keep the bundled articles available if the content service is offline.
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
   return (
     <section className="mt-20">
       <div className="flex items-end justify-between gap-6">
@@ -26,7 +49,7 @@ export default function NewsSection() {
       </div>
 
       <div className="mt-8 grid gap-6 md:grid-cols-3">
-        {newsMock.map((news) => (
+        {articles.slice(0, 3).map((news) => (
           <NewsCard
             key={news.id}
             slug={news.slug}

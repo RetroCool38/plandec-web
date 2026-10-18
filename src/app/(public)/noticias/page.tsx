@@ -1,9 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Container from "@/components/ui/container";
 import { newsMock } from "@/services/mock/news";
 import NewsCard from "@/components/news/news-card";
+import { getPublishedNews } from "@/services/news/news-client";
+import type { NewsArticle } from "@/types/news-article";
 
 const filters = [
   { label: "Todas", value: "all" },
@@ -14,12 +16,29 @@ const filters = [
 
 export default function NoticiasPage() {
   const [activeFilter, setActiveFilter] = useState("all");
+  const [articles, setArticles] = useState<NewsArticle[]>(newsMock);
+
+  useEffect(() => {
+    let active = true;
+
+    getPublishedNews()
+      .then((news) => {
+        if (active && news?.length) setArticles(news);
+      })
+      .catch(() => {
+        // Keep the bundled articles available if the content service is offline.
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const filteredNews = useMemo(() => {
-    if (activeFilter === "all") return newsMock;
+    if (activeFilter === "all") return articles;
 
-    return newsMock.filter((news) => news.country === activeFilter);
-  }, [activeFilter]);
+    return articles.filter((news) => news.country === activeFilter);
+  }, [activeFilter, articles]);
 
   return (
     <Container className="py-16">

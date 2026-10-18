@@ -1,4 +1,6 @@
-export const newsMock = [
+import type { NewsArticle } from "@/types/news-article";
+
+export const newsMock: NewsArticle[] = [
   {
     id: 1,
     slug: "barranquilla-operativo-seguridad-movilizacion-octubre-2026",

@@ -28,8 +28,7 @@ const navLinks: NavItem[] = [
     label: "Noticias",
     href: "/noticias",
     children: [
-      { label: "Noticias por país", href: "/noticias" },
-      { label: "Edición de noticias", href: "/noticias/editar" },
+      { label: "Actualidad territorial", href: "/noticias" },
     ],
   },
   {
