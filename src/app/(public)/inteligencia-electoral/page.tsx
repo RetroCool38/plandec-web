@@ -18,9 +18,9 @@ const W = 900;
 const H = 760;
 const departments: Department[] = [
   { id: "atlantico", name: "Atlántico", title: "del Atlántico", map: "/data/municipios_atlantico.geojson", municipalities: 23, active: true },
-  { id: "norte-de-santander", name: "Norte de Santander", title: "de Norte de Santander", map: "/data/municipios_norte_de_santander.geojson", municipalities: 40, active: false },
-  { id: "bogota-dc", name: "Bogotá D. C.", title: "de Bogotá D. C.", map: "/data/bogota_dc.geojson", municipalities: 1, active: false },
-  { id: "cundinamarca", name: "Cundinamarca", title: "de Cundinamarca", map: "/data/municipios_cundinamarca.geojson", municipalities: 116, active: false },
+  { id: "norte-de-santander", name: "Norte de Santander", title: "de Norte de Santander", map: "/data/municipios_norte_de_santander.geojson?v=20261018", municipalities: 40, active: false },
+  { id: "bogota-dc", name: "Bogotá D. C.", title: "de Bogotá D. C.", map: "/data/bogota_dc.geojson?v=20261018", municipalities: 1, active: false },
+  { id: "cundinamarca", name: "Cundinamarca", title: "de Cundinamarca", map: "/data/municipios_cundinamarca.geojson?v=20261018", municipalities: 116, active: false },
 ];
 
 const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
