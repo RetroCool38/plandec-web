@@ -8,6 +8,10 @@ export const metadata: Metadata = {
   title: "PLANdeC",
   description:
     "Plataforma de inteligencia política, análisis estratégico y posicionamiento.",
+  icons: {
+    icon: [{ url: "/icon.png", type: "image/png" }],
+    apple: "/apple-icon.png",
+  },
 };
 
 export default function RootLayout({
