@@ -9,11 +9,11 @@ export default function NewsSection() {
         <div>
           <p className="text-sm uppercase tracking-[0.2em] text-[#7B3FB6]">Lectura del contexto</p>
           <h2 className="mt-3 text-3xl font-semibold text-[#2A2140]">
-            Actualidad política internacional
+            Actualidad política territorial
           </h2>
           <p className="mt-3 max-w-2xl text-[#5F5868]">
-            Hechos relevantes, resumidos y vinculados a su fuente para facilitar
-            una lectura rápida y confiable.
+            Noticias recientes de Barranquilla, Norte de Santander y Bogotá,
+            resumidas y vinculadas a su fuente original.
           </p>
         </div>
 

@@ -4,9 +4,9 @@ import { useState } from "react";
 import Container from "@/components/ui/container";
 
 const countryOptions = [
-  { label: "Colombia", value: "colombia" },
-  { label: "Panamá", value: "panama" },
-  { label: "Países Bajos", value: "paises-bajos" },
+  { label: "Barranquilla y Atlántico", value: "barranquilla" },
+  { label: "Norte de Santander", value: "norte-de-santander" },
+  { label: "Bogotá D. C.", value: "bogota" },
 ];
 
 export default function NoticiasEditarPage() {
@@ -82,14 +82,14 @@ export default function NoticiasEditarPage() {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm text-white/70">País</label>
+          <label className="mb-2 block text-sm text-white/70">Territorio</label>
           <select
             name="country"
             value={form.country}
             onChange={handleChange}
             className="w-full rounded-xl border border-white/10 bg-[#0B1020] p-4 text-white outline-none focus:border-[#5A2D82]"
           >
-            <option value="">Selecciona un país</option>
+            <option value="">Selecciona un territorio</option>
             {countryOptions.map((country) => (
               <option key={country.value} value={country.value}>
                 {country.label}

@@ -7,9 +7,9 @@ import NewsCard from "@/components/news/news-card";
 
 const filters = [
   { label: "Todas", value: "all" },
-  { label: "Colombia", value: "colombia" },
-  { label: "Panamá", value: "panama" },
-  { label: "Países Bajos", value: "paises-bajos" },
+  { label: "Barranquilla y Atlántico", value: "barranquilla" },
+  { label: "Norte de Santander", value: "norte-de-santander" },
+  { label: "Bogotá D. C.", value: "bogota" },
 ];
 
 export default function NoticiasPage() {
@@ -24,11 +24,11 @@ export default function NoticiasPage() {
   return (
     <Container className="py-16">
       <div className="max-w-3xl">
-        <p className="text-sm uppercase tracking-[0.2em] text-[#7B3FB6]">Actualidad internacional</p>
+        <p className="text-sm uppercase tracking-[0.2em] text-[#7B3FB6]">Actualidad territorial</p>
         <h1 className="mt-3 text-4xl font-bold text-[#251B38]">Noticias</h1>
         <p className="mt-4 text-[#625A69]">
-          Una selección de los hechos políticos más relevantes en los países
-          donde PLANdeC mantiene presencia y análisis.
+          Hechos recientes de los territorios donde PLANdeC desarrolla
+          inteligencia electoral y análisis político.
         </p>
       </div>
 
