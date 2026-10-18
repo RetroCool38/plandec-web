@@ -66,7 +66,7 @@ export default function ElectoralIntelligencePage() {
     setResults({});
     setSelected(null);
     setQuery("");
-    setMunicipality(department.resultsAvailable ? "BARRANQUILLA" : "TODOS");
+    setMunicipality(department.id === "atlantico" ? "BARRANQUILLA" : "TODOS");
 
     const requests: Promise<Response>[] = [fetch(department.map), fetch(department.places)];
     if (department.resultsAvailable && department.elections) {
