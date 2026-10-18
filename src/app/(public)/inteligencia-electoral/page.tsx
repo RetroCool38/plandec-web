@@ -17,10 +17,10 @@ type Department = { id: string; name: string; title: string; map: string; places
 const W = 900;
 const H = 760;
 const departments: Department[] = [
-  { id: "atlantico", name: "Atlántico", title: "del Atlántico", map: "/data/municipios_atlantico.geojson", places: "/data/puestos_votacion_atlantico_2023.geojson", elections: "/data/elecciones_atlantico.json", municipalities: 23, resultsAvailable: true },
-  { id: "norte-de-santander", name: "Norte de Santander", title: "de Norte de Santander", map: "/data/municipios_norte_de_santander.geojson?v=20261018", places: "/data/puestos_votacion_norte_de_santander_2023.geojson?v=20261018", elections: "/data/elecciones_norte_de_santander.json?v=20261018", municipalities: 40, resultsAvailable: true },
-  { id: "bogota-dc", name: "Bogotá D. C.", title: "de Bogotá D. C.", map: "/data/bogota_dc.geojson?v=20261018", places: "/data/puestos_votacion_bogota_2023.geojson?v=20261018", elections: "/data/elecciones_bogota.json?v=20261018", municipalities: 1, resultsAvailable: true },
-  { id: "cundinamarca", name: "Cundinamarca", title: "de Cundinamarca", map: "/data/municipios_cundinamarca.geojson?v=20261018", places: "/data/puestos_votacion_cundinamarca_2023.geojson?v=20261018", elections: "/data/elecciones_cundinamarca.json?v=20261018", municipalities: 116, resultsAvailable: true },
+  { id: "atlantico", name: "Atlántico", title: "del Atlántico", map: "/data/municipios_atlantico.geojson", places: "/data/puestos_votacion_atlantico_2026.geojson?v=20261018-2", elections: "/data/elecciones_atlantico.json", municipalities: 23, resultsAvailable: true },
+  { id: "norte-de-santander", name: "Norte de Santander", title: "de Norte de Santander", map: "/data/municipios_norte_de_santander.geojson?v=20261018", places: "/data/puestos_votacion_norte_de_santander_2026.geojson?v=20261018-2", elections: "/data/elecciones_norte_de_santander.json?v=20261018", municipalities: 40, resultsAvailable: true },
+  { id: "bogota-dc", name: "Bogotá D. C.", title: "de Bogotá D. C.", map: "/data/bogota_dc.geojson?v=20261018", places: "/data/puestos_votacion_bogota_2026.geojson?v=20261018-2", elections: "/data/elecciones_bogota.json?v=20261018", municipalities: 1, resultsAvailable: true },
+  { id: "cundinamarca", name: "Cundinamarca", title: "de Cundinamarca", map: "/data/municipios_cundinamarca.geojson?v=20261018", places: "/data/puestos_votacion_cundinamarca_2026.geojson?v=20261018-2", elections: "/data/elecciones_cundinamarca.json?v=20261018", municipalities: 116, resultsAvailable: true },
 ];
 
 const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
