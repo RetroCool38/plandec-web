@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
@@ -147,7 +146,7 @@ export default function LoginPage() {
           {error && <p role="alert" className="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
           {recoveryMessage && <p role="status" className="mt-4 rounded-xl bg-emerald-50 p-3 text-sm text-emerald-800">{recoveryMessage}</p>}
           <button disabled={loading || !isSupabaseConfigured} className="mt-5 w-full rounded-xl bg-[#5A2D82] py-3.5 font-bold text-white disabled:cursor-not-allowed disabled:bg-[#A58DAF]">{loading ? "Guardando…" : invitedEmail ? "Crear contraseña e ingresar" : "Ingresar"}</button>
-          {!invitedEmail && <><button type="button" onClick={handlePasswordRecovery} disabled={loading || !isSupabaseConfigured} className="mt-3 w-full py-2 text-sm font-bold text-[#5A2D82] underline underline-offset-4 disabled:text-[#A58DAF]">Crear o recuperar contraseña</button><Link href="/campana" className="mt-2 block w-full rounded-xl border border-[#5A2D82] py-3.5 text-center font-bold text-[#5A2D82]">Ver demostración sin datos personales</Link><p className="mt-3 text-center text-xs leading-5 text-[#7A6E80]">La demostración no guarda nombres, cédulas, teléfonos ni preferencias.</p></>}
+          {!invitedEmail && <button type="button" onClick={handlePasswordRecovery} disabled={loading || !isSupabaseConfigured} className="mt-3 w-full py-2 text-sm font-bold text-[#5A2D82] underline underline-offset-4 disabled:text-[#A58DAF]">Crear o recuperar contraseña</button>}
         </form>
       </div>
     </div>
