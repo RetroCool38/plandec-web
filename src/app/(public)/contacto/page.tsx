@@ -76,7 +76,7 @@ export default function ContactoPage() {
           </form>
 
           <a
-            href="https://wa.me/3160450461?text=Hola,%20quiero%20información%20sobre%20asesoría%20política"
+            href="https://wa.me/573160450461?text=Hola,%20quiero%20información%20sobre%20asesoría%20política"
             target="_blank"
             rel="noreferrer"
             className="mt-6 block rounded-full border border-[#5A2D82] py-3 text-center font-semibold text-[#5A2D82] transition hover:bg-[#F3EAF8]"
@@ -109,7 +109,7 @@ export default function ContactoPage() {
                   Teléfono / WhatsApp
                 </p>
                 <a
-                  href="https://wa.me/3160450461"
+                  href="https://wa.me/573160450461"
                   target="_blank"
                   rel="noreferrer"
                   className="mt-2 inline-block text-lg font-semibold text-[#342A40] transition hover:text-[#5A2D82]"
