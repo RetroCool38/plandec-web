@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
+import InstallAppButton from "@/components/pwa/install-app-button";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -147,6 +148,7 @@ export default function LoginPage() {
           {recoveryMessage && <p role="status" className="mt-4 rounded-xl bg-emerald-50 p-3 text-sm text-emerald-800">{recoveryMessage}</p>}
           <button disabled={loading || !isSupabaseConfigured} className="mt-5 w-full rounded-xl bg-[#5A2D82] py-3.5 font-bold text-white disabled:cursor-not-allowed disabled:bg-[#A58DAF]">{loading ? "Guardando…" : invitedEmail ? "Crear contraseña e ingresar" : "Ingresar"}</button>
           {!invitedEmail && <button type="button" onClick={handlePasswordRecovery} disabled={loading || !isSupabaseConfigured} className="mt-3 w-full py-2 text-sm font-bold text-[#5A2D82] underline underline-offset-4 disabled:text-[#A58DAF]">Crear o recuperar contraseña</button>}
+          {!invitedEmail && <InstallAppButton />}
         </form>
       </div>
     </div>
