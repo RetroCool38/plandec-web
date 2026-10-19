@@ -13,6 +13,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [invitedEmail, setInvitedEmail] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [recoveryMessage, setRecoveryMessage] = useState("");
 
   useEffect(() => {
     const supabase = createClient();
@@ -59,8 +60,35 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/editor/noticias");
+    const { data: profile } = await supabase.from("profiles").select("role").eq("id", invitedEmail ? (await supabase.auth.getUser()).data.user?.id : "").maybeSingle();
+    router.push(profile?.role === "editor" ? "/editor/noticias" : "/campana");
     router.refresh();
+  }
+
+  async function handlePasswordRecovery() {
+    setError("");
+    setRecoveryMessage("");
+    if (!email) {
+      setError("Escribe primero tu correo para enviarte el enlace seguro.");
+      return;
+    }
+
+    const supabase = createClient();
+    if (!supabase) {
+      setError("La base de datos todavía no está conectada en este entorno.");
+      return;
+    }
+
+    setLoading(true);
+    const { error: recoveryError } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/login`,
+    });
+    setLoading(false);
+    if (recoveryError) {
+      setError("No fue posible enviar el enlace. Revisa el correo e inténtalo de nuevo.");
+      return;
+    }
+    setRecoveryMessage("Te enviamos un enlace seguro. Ábrelo desde el mismo navegador y crea una contraseña de 8 caracteres o más.");
   }
 
   async function handleSubmit(event: FormEvent) {
@@ -81,14 +109,21 @@ export default function LoginPage() {
     }
 
     const { data: profile } = await supabase.from("profiles").select("role").eq("id", data.user.id).maybeSingle();
-    if (!profile || !["editor", "admin"].includes(profile.role)) {
+    if (profile?.role === "editor") {
+      router.push("/editor/noticias");
+      router.refresh();
+      return;
+    }
+
+    const { data: membership } = await supabase.from("campaign_members").select("campaign_id").eq("user_id", data.user.id).eq("active", true).limit(1).maybeSingle();
+    if (profile?.role !== "admin" && !membership) {
       await supabase.auth.signOut();
-      setError("Este usuario no tiene permiso para editar noticias.");
+      setError("Este usuario no tiene un permiso activo en PLANdeC.");
       setLoading(false);
       return;
     }
 
-    router.push("/editor/noticias");
+    router.push("/campana");
     router.refresh();
   }
 
@@ -107,10 +142,12 @@ export default function LoginPage() {
           {!isSupabaseConfigured && <div className="mt-5 rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">La conexión a Supabase está pendiente de configurar.</div>}
           {!invitedEmail && <label className="mt-7 block text-xs font-bold">Correo<input required type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="usuario@plandec.com" className="mt-2 h-12 w-full rounded-xl border border-[#D8C8E0] bg-white px-4 outline-none focus:border-[#5A2D82]" /></label>}
           <label className={`${invitedEmail ? "mt-7" : "mt-4"} block text-xs font-bold`}>{invitedEmail ? "Nueva contraseña" : "Contraseña"}<input required minLength={8} value={password} onChange={(event) => setPassword(event.target.value)} type="password" placeholder="••••••••" className="mt-2 h-12 w-full rounded-xl border border-[#D8C8E0] bg-white px-4 outline-none focus:border-[#5A2D82]" /></label>
+          {invitedEmail && <p className="mt-2 text-xs text-[#6A6071]">Usa 8 caracteres o más. Por ejemplo: Ramona2026.</p>}
           {invitedEmail && <label className="mt-4 block text-xs font-bold">Confirmar contraseña<input required minLength={8} value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} type="password" placeholder="••••••••" className="mt-2 h-12 w-full rounded-xl border border-[#D8C8E0] bg-white px-4 outline-none focus:border-[#5A2D82]" /></label>}
           {error && <p role="alert" className="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
+          {recoveryMessage && <p role="status" className="mt-4 rounded-xl bg-emerald-50 p-3 text-sm text-emerald-800">{recoveryMessage}</p>}
           <button disabled={loading || !isSupabaseConfigured} className="mt-5 w-full rounded-xl bg-[#5A2D82] py-3.5 font-bold text-white disabled:cursor-not-allowed disabled:bg-[#A58DAF]">{loading ? "Guardando…" : invitedEmail ? "Crear contraseña e ingresar" : "Ingresar"}</button>
-          {!invitedEmail && <><Link href="/campana" className="mt-4 block w-full rounded-xl border border-[#5A2D82] py-3.5 text-center font-bold text-[#5A2D82]">Ver demostración sin datos personales</Link><p className="mt-3 text-center text-xs leading-5 text-[#7A6E80]">La demostración no guarda nombres, cédulas, teléfonos ni preferencias.</p></>}
+          {!invitedEmail && <><button type="button" onClick={handlePasswordRecovery} disabled={loading || !isSupabaseConfigured} className="mt-3 w-full py-2 text-sm font-bold text-[#5A2D82] underline underline-offset-4 disabled:text-[#A58DAF]">Crear o recuperar contraseña</button><Link href="/campana" className="mt-2 block w-full rounded-xl border border-[#5A2D82] py-3.5 text-center font-bold text-[#5A2D82]">Ver demostración sin datos personales</Link><p className="mt-3 text-center text-xs leading-5 text-[#7A6E80]">La demostración no guarda nombres, cédulas, teléfonos ni preferencias.</p></>}
         </form>
       </div>
     </div>
