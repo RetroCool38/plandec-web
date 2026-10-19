@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "@/components/layout/navbar";
-import Footer from "@/components/layout/footer";
-import ChatWidget from "@/components/ai/ChatWidget";
+import SiteFrame from "@/components/layout/site-frame";
+import ServiceWorkerRegister from "@/components/pwa/service-worker-register";
 
 export const metadata: Metadata = {
   title: "PLANdeC",
   description:
     "Plataforma de inteligencia política, análisis estratégico y posicionamiento.",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: { capable: true, title: "PLANdeC", statusBarStyle: "black-translucent" },
   icons: {
     icon: [{ url: "/icon.png", type: "image/png" }],
     apple: "/apple-icon.png",
@@ -22,12 +23,8 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className="min-h-screen text-[#2A2140] antialiased">
-       <div className="flex min-h-screen flex-col bg-transparent">
-          <Navbar />
-         <main className="flex-1 bg-transparent">{children}</main>
-          <Footer />
-          <ChatWidget />
-        </div>
+        <ServiceWorkerRegister />
+        <SiteFrame>{children}</SiteFrame>
       </body>
     </html>
   );
