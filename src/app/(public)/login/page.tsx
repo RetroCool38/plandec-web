@@ -27,8 +27,10 @@ export default function LoginPage() {
     if (!supabase) return;
 
     let active = true;
-    const authType = new URLSearchParams(window.location.hash.replace(/^#/, "")).get("type") || new URLSearchParams(window.location.search).get("type");
-    const passwordFlow = authType === "recovery" || authType === "invite";
+    // Solo mostramos el formulario de nueva contraseña cuando PLANdeC inició
+    // expresamente ese flujo. Los enlaces antiguos de Supabase pueden conservar
+    // `type=recovery` en el celular y no deben atrapar una sesión ya válida.
+    const passwordFlow = new URLSearchParams(window.location.search).get("setup") === "1";
     supabase.auth.getSession().then(({ data }) => {
       if (!active || !data.session?.user.email) return;
       if (passwordFlow) setInvitedEmail(data.session.user.email);
@@ -37,8 +39,8 @@ export default function LoginPage() {
 
     const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
       if (!session?.user.email) return;
-      if (event === "PASSWORD_RECOVERY" || passwordFlow) setInvitedEmail(session.user.email);
-      else if (event === "SIGNED_IN") router.replace(getDestination());
+      if (passwordFlow && event === "PASSWORD_RECOVERY") setInvitedEmail(session.user.email);
+      else if (event === "SIGNED_IN" || event === "PASSWORD_RECOVERY") router.replace(getDestination());
     });
 
     return () => {
@@ -94,7 +96,7 @@ export default function LoginPage() {
 
     setLoading(true);
     const { error: recoveryError } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/login?next=/campana/campo`,
+      redirectTo: `${window.location.origin}/login?setup=1&next=/campana/campo`,
     });
     setLoading(false);
     if (recoveryError) {
