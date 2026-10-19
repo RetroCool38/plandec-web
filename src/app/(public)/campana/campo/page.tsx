@@ -58,7 +58,7 @@ export default function FieldCampaignPage() {
       if (!supabase) { setError("No está disponible la conexión segura."); setLoading(false); return; }
       const { data: sessionData } = await supabase.auth.getSession();
       const user = sessionData.session?.user;
-      if (!user) { router.replace("/login"); return; }
+      if (!user) { router.replace("/login?next=/campana/campo"); return; }
       setUserId(user.id);
       const { data: campaignData, error: campaignError } = await supabase.from("campaigns").select("id,name,campaign_territories(status,territories(id,name,slug))").limit(1).maybeSingle();
       if (campaignError || !campaignData) { setError("No tienes una campaña activa asignada."); setLoading(false); return; }

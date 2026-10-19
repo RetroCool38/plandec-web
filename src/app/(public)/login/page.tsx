@@ -5,6 +5,13 @@ import { useRouter } from "next/navigation";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import InstallAppButton from "@/components/pwa/install-app-button";
 
+function getDestination(profileRole?: string) {
+  const requested = new URLSearchParams(window.location.search).get("next");
+  if (requested?.startsWith("/") && !requested.startsWith("//")) return requested;
+  if (profileRole === "editor") return "/editor/noticias";
+  return window.matchMedia("(max-width: 768px)").matches ? "/campana/campo" : "/campana";
+}
+
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -20,19 +27,25 @@ export default function LoginPage() {
     if (!supabase) return;
 
     let active = true;
+    const authType = new URLSearchParams(window.location.hash.replace(/^#/, "")).get("type") || new URLSearchParams(window.location.search).get("type");
+    const passwordFlow = authType === "recovery" || authType === "invite";
     supabase.auth.getSession().then(({ data }) => {
-      if (active && data.session?.user.email) setInvitedEmail(data.session.user.email);
+      if (!active || !data.session?.user.email) return;
+      if (passwordFlow) setInvitedEmail(data.session.user.email);
+      else router.replace(getDestination());
     });
 
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user.email) setInvitedEmail(session.user.email);
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!session?.user.email) return;
+      if (event === "PASSWORD_RECOVERY" || passwordFlow) setInvitedEmail(session.user.email);
+      else if (event === "SIGNED_IN") router.replace(getDestination());
     });
 
     return () => {
       active = false;
       listener.subscription.unsubscribe();
     };
-  }, []);
+  }, [router]);
 
   async function handleCreatePassword(event: FormEvent) {
     event.preventDefault();
@@ -61,7 +74,7 @@ export default function LoginPage() {
     }
 
     const { data: profile } = await supabase.from("profiles").select("role").eq("id", invitedEmail ? (await supabase.auth.getUser()).data.user?.id : "").maybeSingle();
-    router.push(profile?.role === "editor" ? "/editor/noticias" : "/campana");
+    router.push(getDestination(profile?.role));
     router.refresh();
   }
 
@@ -81,7 +94,7 @@ export default function LoginPage() {
 
     setLoading(true);
     const { error: recoveryError } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/login`,
+      redirectTo: `${window.location.origin}/login?next=/campana/campo`,
     });
     setLoading(false);
     if (recoveryError) {
@@ -110,7 +123,7 @@ export default function LoginPage() {
 
     const { data: profile } = await supabase.from("profiles").select("role").eq("id", data.user.id).maybeSingle();
     if (profile?.role === "editor") {
-      router.push("/editor/noticias");
+      router.push(getDestination("editor"));
       router.refresh();
       return;
     }
@@ -123,7 +136,7 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/campana");
+    router.push(getDestination(profile?.role));
     router.refresh();
   }
 
@@ -147,6 +160,7 @@ export default function LoginPage() {
           {error && <p role="alert" className="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
           {recoveryMessage && <p role="status" className="mt-4 rounded-xl bg-emerald-50 p-3 text-sm text-emerald-800">{recoveryMessage}</p>}
           <button disabled={loading || !isSupabaseConfigured} className="mt-5 w-full rounded-xl bg-[#5A2D82] py-3.5 font-bold text-white disabled:cursor-not-allowed disabled:bg-[#A58DAF]">{loading ? "Guardando…" : invitedEmail ? "Crear contraseña e ingresar" : "Ingresar"}</button>
+          {invitedEmail && <button type="button" onClick={() => router.push(getDestination())} className="mt-3 w-full rounded-xl border border-[#5A2D82] py-3 text-sm font-bold text-[#5A2D82]">Continuar a PLANdeC Campo</button>}
           {!invitedEmail && <button type="button" onClick={handlePasswordRecovery} disabled={loading || !isSupabaseConfigured} className="mt-3 w-full py-2 text-sm font-bold text-[#5A2D82] underline underline-offset-4 disabled:text-[#A58DAF]">Crear o recuperar contraseña</button>}
           {!invitedEmail && <InstallAppButton />}
         </form>
